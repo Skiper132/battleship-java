@@ -35,10 +35,21 @@ public class Barco {
         return casillas.length;
     }
 
+    /**
+     * Devuelve el estado del barco.
+     * @return el estado del barco.
+     */
     public EstadoBarco getEstado() {
         return estado;
     }
 
+    /**
+     * Recorre un array de casillas y comprueba que todas estén vacías, si es así, 
+     * asigna el array de casillas al barco y cambia el estado del barco a POSICIONADO.
+     *
+     * @param casillas
+     * @throws BarcoNoPosicionableException
+     */
     public void setCasillas(Casilla[] casillas) throws BarcoNoPosicionableException {
         for (Casilla casilla : casillas) {
             if (casilla.getEstado() != EstadoCasilla.VACIA) {
