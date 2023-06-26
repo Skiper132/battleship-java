@@ -6,35 +6,54 @@ import com.battleship.excepciones.CasillaYaAtacadaException;
  * Representa una casilla en el tablero.
  */
 public class Casilla {
-    private enum Estado { VACIA, OCUPADA, ATACADA }
+    private Coordenada coordenada;
+    private EstadoCasilla estado;
 
-    Coordenada coordenada;
-    Estado estado;
-
+    /**
+     * Crea una casilla en la posición especificada, crea una coordenada con la fila y columna especificadas y
+     * establece el estado de la casilla a VACIA.
+     *
+     * @param fila    la fila de la casilla.
+     * @param columna la columna de la casilla.
+     */
     public Casilla(char fila, int columna) {
-        coordenada = new Coordenada();
-        coordenada.fila = fila;
-        coordenada.columna = columna;
-        estado = Estado.VACIA;
+        this.coordenada = new Coordenada(fila, columna);
+        this.estado = EstadoCasilla.VACIA;
     }
 
+    /**
+     * Devuelve la coordenada de la casilla.
+     *
+     * @return la coordenada de la casilla.
+     */
     public Coordenada getCoordenada() {
         return coordenada;
     }
 
-    public boolean esAtacada() {
-        return estado == Estado.ATACADA;
+    /**
+     * Devuelve el estado de la casilla.
+     *
+     * @return el estado de la casilla.
+     */
+    public EstadoCasilla getEstado() {
+        return this.estado;
     }
 
-    public boolean esOcupada() {
-        return estado == Estado.OCUPADA;
+    /**
+     * Establece el estado de la casilla.
+     *
+     * @param estado el estado de la casilla.
+     */
+    public void setEstado(EstadoCasilla estado) {
+        this.estado = estado;
     }
 
+    // TODO: IMPLEMENTAR
     public ResultadoAtaque atacar() throws CasillaYaAtacadaException {
-        if (estado == Estado.ATACADA) {
+        if (estado == EstadoCasilla.ATACADA) {
             throw new CasillaYaAtacadaException();
         } else {
-            estado = Estado.ATACADA;
+            estado = EstadoCasilla.ATACADA;
             return ResultadoAtaque.ACIERTO;
         }
     }
