@@ -45,7 +45,7 @@ public class Tablero {
         return casillas[fila][columna];
     }
 
-    
+
     public void posicionarBarco(Barco barco, Casilla casillaInicial, Direccion direccion)
         throws BarcoNoPosicionableException, BarcoFueraDeRangoException, BarcoYaPosicionadoException {
 
@@ -80,7 +80,9 @@ public class Tablero {
             if (coordenadaActual.getFila() < 'A' || coordenadaActual.getFila() > 'I' || coordenadaActual.getColumna() < 1 || coordenadaActual.getColumna() > 9) {
                 throw new BarcoFueraDeRangoException();
             }
-
+            if (getCasilla(coordenadaActual).getEstado() == EstadoCasilla.OCUPADA) {
+                throw new BarcoNoPosicionableException();
+            }
             casillasParaElBarco[i] = getCasilla(coordenadaActual);
 
             // Actualizar la coordenada para la próxima iteración
