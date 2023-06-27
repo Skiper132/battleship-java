@@ -48,7 +48,7 @@ public class Casilla {
         this.estado = estado;
     }
 
-    public ResultadoAtaque atacar() throws CasillaYaAtacadaException {
+    public ResultadoAtaque atacarCasilla() throws CasillaYaAtacadaException {
         // TODO: implementar ((tentativo)))
 
         /*
