@@ -19,4 +19,12 @@ public class Coordenada {
     public int getColumna() {
         return columna;
     }
+
+    public void setColumna(int i) {
+        this.columna = i;
+    }
+
+    public void setFila(char c) {
+        this.fila = c;
+    }
 }

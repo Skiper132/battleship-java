@@ -45,35 +45,11 @@ public class Tablero {
         return casillas[fila][columna];
     }
 
-
-    public void posicionarBarco(Barco barco, Casilla casillaInicial, Direccion direccion)
-        throws BarcoNoPosicionableException, BarcoFueraDeRangoException, BarcoYaPosicionadoException {
-
-        if(barco.getEstado() == EstadoBarco.POSICIONADO) {
-            throw new BarcoYaPosicionadoException();
-        }
+    public Casilla[] asignarCasillasParaBarco(Barco barco, Coordenada coordenadaInicial, int desplazamientoFila, int desplazamientoColumna)
+            throws BarcoNoPosicionableException, BarcoFueraDeRangoException {
 
         Casilla[] casillasParaElBarco = new Casilla[barco.getLongitud()];
-        Coordenada coordenadaActual = casillaInicial.getCoordenada();
-
-        int incrementoFila = 0;
-        int incrementoColumna = 0;
-
-        // Ajustar el incremento de la coordenada en función de la dirección especificada
-        switch (direccion) {
-            case NORTE:
-                incrementoColumna = -1;
-                break;
-            case SUR:
-                incrementoColumna = 1;
-                break;
-            case ESTE:
-                incrementoFila = 1;
-                break;
-            case OESTE:
-                incrementoFila = -1;
-                break;
-        }
+        Coordenada coordenadaActual = new Coordenada(coordenadaInicial.getFila(), coordenadaInicial.getColumna());
 
         // Asignar las casillas al barco
         for (int i = 0; i < barco.getLongitud(); i++) {
@@ -86,10 +62,13 @@ public class Tablero {
             casillasParaElBarco[i] = getCasilla(coordenadaActual);
 
             // Actualizar la coordenada para la próxima iteración
-            coordenadaActual = new Coordenada((char) (coordenadaActual.getFila() + incrementoFila), coordenadaActual.getColumna() + incrementoColumna);
+            coordenadaActual.setFila((char) (coordenadaActual.getFila() + desplazamientoFila));
+            coordenadaActual.setColumna(coordenadaActual.getColumna() + desplazamientoColumna);
         }
 
-        // Configurar las casillas para el barco
-        barco.setCasillas(casillasParaElBarco);
+        return casillasParaElBarco;
     }
+
+
+
 }
