@@ -1,5 +1,5 @@
 package com.battleship.modelo;
 
 public enum EstadoBarco {
-    POSICIONADO, HUNDIDO
+    POSICIONADO, HUNDIDO, NO_POSICIONADO
 }
