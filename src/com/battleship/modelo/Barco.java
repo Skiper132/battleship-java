@@ -51,12 +51,21 @@ public class Barco {
 
     /**
      * Devuelve el estado del barco.
+     *
      * @return el estado del barco.
      */
     public EstadoBarco getEstado() {
         return estado;
     }
 
+    /**
+     * Devuelve el nombre del barco.
+     *
+     * @return el nombre del barco.
+     */
+    public String getNombre() {
+        return nombre;
+    }
 
     /**
      * Captura un array de casillas y lo asigna al barco.

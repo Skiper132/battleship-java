@@ -2,11 +2,9 @@ package com.battleship.modelo;
 
 import com.battleship.excepciones.BarcoFueraDeRangoException;
 import com.battleship.excepciones.BarcoNoPosicionableException;
-import com.battleship.excepciones.BarcoYaPosicionadoException;
 
 public class Tablero {
     Casilla[][] casillas;
-    
 
     /**
      * Crear un tablero de 9x9 y lo inicializa con casillas.
@@ -45,6 +43,17 @@ public class Tablero {
         return casillas[fila][columna];
     }
 
+    /**
+     * Asigna las casillas al barco en la coordenada especificada desplazándose en la dirección especificada.
+     * <p>
+     * @param barco el barco al que se le asignarán las casillas.
+     * @param coordenadaInicial la coordenada inicial donde se asignará la primera casilla del barco.
+     * @param desplazamientoFila el desplazamiento en la fila para asignar las casillas.
+     * @param desplazamientoColumna el desplazamiento en la columna para asignar las casillas.
+     * @return las casillas asignadas al barco.
+     * @throws BarcoNoPosicionableException si el barco no se puede posicionar en la coordenada especificada.
+     * @throws BarcoFueraDeRangoException si el barco se sale del tablero.
+     */
     public Casilla[] asignarCasillasParaBarco(Barco barco, Coordenada coordenadaInicial, int desplazamientoFila, int desplazamientoColumna)
             throws BarcoNoPosicionableException, BarcoFueraDeRangoException {
 
