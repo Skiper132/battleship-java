@@ -48,22 +48,18 @@ public class Casilla {
         this.estado = estado;
     }
 
-    // TODO: IMPLEMENTAR
     public ResultadoAtaque atacar() throws CasillaYaAtacadaException {
-        if (estado == EstadoCasilla.ATACADA) {
-            throw new CasillaYaAtacadaException();
-        } else {
-            estado = EstadoCasilla.ATACADA;
-            return ResultadoAtaque.ACIERTO;
-        }
-    }
+        // TODO: implementar ((tentativo)))
 
-    public void ocupar() throws CasillaYaOcupadaException {
-        if (estado == Estado.OCUPADA) {
-            throw new CasillaYaOcupadaException();
-        } else {
-            estado = Estado.OCUPADA;
-        }
+        /*
+         * Si el estado de la casilla es VACIA, se cambia el estado a ATACADA y devuelve FALLO,
+         * Si el estado de la casilla es OCUPADA, se cambia el estado a ATACADA y devuelve ACIERTO,
+         * Si el estado de la casilla es ATACADA, se lanza una excepción CasillaYaAtacadaException.
+         * 
+         * Posiblemente, podriamos almacenar el resultado de los ataques que se hagan a un barco para poder
+         * determinar si el barco se hundió o no.
+         */
+        return null;
     }
 }
 
