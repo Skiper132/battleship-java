@@ -62,7 +62,6 @@ public class Barco {
      * Captura un array de casillas y lo asigna al barco.
      */
     public void setCasillas(Casilla[] casillas) {
-
         this.casillas = casillas;
         for (Casilla casilla : casillas) {
             casilla.setEstado(EstadoCasilla.OCUPADA);;

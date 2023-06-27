@@ -2,14 +2,12 @@ package com.battleship.modelo;
 
 public class Jugador {
     private String nombre;
-    private Tablero tableroPropio;
-    private Tablero tableroEnemigo;
-    Barco[] barcos;
+    private Tablero tablero;
+    private Barco[] barcos;
 
-    Jugador(String nombre) {
+    public Jugador(String nombre) {
         this.nombre = nombre;
-        this.tableroPropio = new Tablero();
-        this.tableroEnemigo = new Tablero();
+        this.tablero = new Tablero();
         this.barcos = new Barco[5];
         this.barcos[0] = new Barco(4);
         this.barcos[1] = new Barco(3);
@@ -21,12 +19,8 @@ public class Jugador {
         return nombre;
     }
 
-    public Tablero getTableroPropio() {
-        return tableroPropio;
-    }
-
-    public Tablero getTableroEnemigo() {
-        return tableroEnemigo;
+    public Tablero getTablero() {
+        return tablero;
     }
 
     public Barco[] getBarcos() {
