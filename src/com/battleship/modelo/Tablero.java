@@ -47,7 +47,7 @@ public class Tablero {
 
 
     public void posicionarBarco(Barco barco, Casilla casillaInicial, Direccion direccion)
-        throws BarcoNoPosicionableException, BarcoFueraDeRangoException, BarcoYaPosicionadoException {
+            throws BarcoNoPosicionableException, BarcoFueraDeRangoException, BarcoYaPosicionadoException {
 
         if(barco.getEstado() == EstadoBarco.POSICIONADO) {
             throw new BarcoYaPosicionadoException();
@@ -86,10 +86,12 @@ public class Tablero {
             casillasParaElBarco[i] = getCasilla(coordenadaActual);
 
             // Actualizar la coordenada para la próxima iteración
-            coordenadaActual = new Coordenada((char) (coordenadaActual.getFila() + incrementoFila), coordenadaActual.getColumna() + incrementoColumna);
+            coordenadaActual.setFila((char) (coordenadaActual.getFila() + incrementoFila));
+            coordenadaActual.setColumna(coordenadaActual.getColumna() + incrementoColumna);
         }
 
         // Configurar las casillas para el barco
         barco.setCasillas(casillasParaElBarco);
     }
+
 }
