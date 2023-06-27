@@ -59,7 +59,17 @@ public class Casilla {
          * Posiblemente, podriamos almacenar el resultado de los ataques que se hagan a un barco para poder
          * determinar si el barco se hundió o no.
          */
-        return null;
+        if (this.estado == EstadoCasilla.ATACADA) {
+            throw new CasillaYaAtacadaException();
+        }
+
+        this.estado = EstadoCasilla.ATACADA;
+
+        if (this.estado == EstadoCasilla.OCUPADA) {
+            return ResultadoAtaque.ACIERTO;
+        }
+
+        return ResultadoAtaque.FALLA;
     }
 }
 

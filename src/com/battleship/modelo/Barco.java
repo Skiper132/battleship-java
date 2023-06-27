@@ -1,13 +1,12 @@
 package com.battleship.modelo;
 
-import com.battleship.excepciones.BarcoNoPosicionableException;
-
 /**
  * Representa un barco en el tablero.
  */
 public class Barco {
     private Casilla[] casillas;
     private EstadoBarco estado;
+    private String nombre;
     /**
      * Crea un barco de tamaño especificado.
      *
@@ -15,6 +14,21 @@ public class Barco {
      */
     public Barco(int longitud) {
         this.casillas = new Casilla[longitud];
+        this.estado = EstadoBarco.NO_POSICIONADO;
+        switch (longitud) {
+            case 2:
+                this.nombre = "Lancha";
+                break;
+            case 3:
+                this.nombre = "Submarino";
+                break;
+            case 4:
+                this.nombre = "Acorazado";
+                break;
+            default:
+                this.nombre = "Barco";
+                break;
+        }
     }
 
     /**
@@ -43,19 +57,11 @@ public class Barco {
         return estado;
     }
 
+
     /**
-     * Recorre un array de casillas y comprueba que todas estén vacías, si es así, 
-     * asigna el array de casillas al barco y cambia el estado del barco a POSICIONADO.
-     *
-     * @param casillas
-     * @throws BarcoNoPosicionableException
+     * Captura un array de casillas y lo asigna al barco.
      */
-    public void setCasillas(Casilla[] casillas) throws BarcoNoPosicionableException {
-        for (Casilla casilla : casillas) {
-            if (casilla.getEstado() != EstadoCasilla.VACIA) {
-                throw new BarcoNoPosicionableException();
-            }
-        }
+    public void setCasillas(Casilla[] casillas) {
 
         this.casillas = casillas;
         for (Casilla casilla : casillas) {
