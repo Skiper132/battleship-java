@@ -9,16 +9,16 @@ public class Tablero {
      * Crear un tablero de 9x9 y lo inicializa con casillas.
      */
     public Tablero() {
-        int filas = 9;
-        int columnas = 9;
-        casillas = new Casilla[filas][columnas];
-        for (int i = 0; i < filas; i++) {
-            char fila = (char) ('A' + i); // A, B, C, D, E, F, G, H, I
-            for (int j = 0; j < columnas; j++) {
-                casillas[i][j] = new Casilla(fila, j + 1);
-            }
+    int filas = 9;
+    int columnas = 9;
+    casillas = new Casilla[filas][columnas];
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            casillas[i][j] = new Casilla((char) ('A' + i), j + 1);
         }
     }
+}
+
 
     /**
      * Devuelve las casillas del tablero.
