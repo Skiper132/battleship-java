@@ -5,7 +5,6 @@ import com.battleship.excepciones.BarcoNoPosicionableException;
 
 public class Tablero {
     Casilla[][] casillas;
-
     /**
      * Crear un tablero de 9x9 y lo inicializa con casillas.
      */
@@ -58,6 +57,7 @@ public class Tablero {
             throws BarcoNoPosicionableException, BarcoFueraDeRangoException {
 
         Casilla[] casillasParaElBarco = new Casilla[barco.getLongitud()];
+        // coordenadaActual es una copia de coordenadaInicial, sirve como puntero para recorrer las casillas
         Coordenada coordenadaActual = new Coordenada(coordenadaInicial.getFila(), coordenadaInicial.getColumna());
 
         // Asignar las casillas al barco
