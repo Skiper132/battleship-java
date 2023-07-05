@@ -14,7 +14,8 @@ public enum Direccion {
     private final int desplazamientoFila;
     private final int desplazamientoColumna;
 
-    Direccion(int desplazamientoFila, int desplazamientoColumna) {
+    // Constructor privado para que no se pueda instanciar desde fuera.
+    private Direccion(int desplazamientoFila, int desplazamientoColumna) {
         this.desplazamientoFila = desplazamientoFila;
         this.desplazamientoColumna = desplazamientoColumna;
     }
