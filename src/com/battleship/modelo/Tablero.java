@@ -3,22 +3,34 @@ package com.battleship.modelo;
 import com.battleship.excepciones.BarcoFueraDeRangoException;
 import com.battleship.excepciones.BarcoNoPosicionableException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Tablero {
     Casilla[][] casillas;
-    /**
-     * Crear un tablero de 9x9 y lo inicializa con casillas.
-     */
-    public Tablero() {
-    int filas = 9;
-    int columnas = 9;
-    casillas = new Casilla[filas][columnas];
-    for (int i = 0; i < filas; i++) {
-        for (int j = 0; j < columnas; j++) {
-            casillas[i][j] = new Casilla((char) ('A' + i), j + 1);
-        }
-    }
-}
+    List<Barco> barcos;
 
+    public Tablero() {
+        int filas = 9;
+        int columnas = 9;
+
+        this.casillas = new Casilla[filas][columnas];
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                this.casillas[i][j] = new Casilla((char) ('A' + i), j + 1);
+            }
+        }
+        this.barcos = new ArrayList<>();
+    }
+
+    /**
+     * Devuelve los barcos del tablero.
+     *
+     * @return los barcos del tablero.
+     */
+    public List<Barco> getBarcos() {
+        return barcos;
+    }
 
     /**
      * Devuelve las casillas del tablero.
@@ -78,6 +90,12 @@ public class Tablero {
         return casillasParaElBarco;
     }
 
-
-
+    /**
+     * Agrega un barco a la lista de barcos del tablero.
+     *
+     * @param barco el barco a agregar.
+     */
+    public void agregarBarco(Barco barco) {
+        barcos.add(barco);
+    }
 }
