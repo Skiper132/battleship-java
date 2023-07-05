@@ -8,7 +8,7 @@ public class Barco {
     private EstadoBarco estado;
     private String nombre;
     /**
-     * Crea un barco de tamaño especificado. 
+     * Crea un barco de tamaño especificado.
      *
      * @param tamano el tamaño del barco.
      */
