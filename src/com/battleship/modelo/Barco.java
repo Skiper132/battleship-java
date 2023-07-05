@@ -15,6 +15,8 @@ public class Barco {
     public Barco(int longitud) {
         this.casillas = new Casilla[longitud];
         this.estado = EstadoBarco.NO_POSICIONADO;
+
+        // TODO: Asignar nombre al barco según su longitud
         switch (longitud) {
             case 2:
                 this.nombre = "Lancha";
@@ -50,12 +52,25 @@ public class Barco {
     }
 
     /**
-     * Devuelve el estado del barco.
+     * Devuelve el estado del barco. TEST
+     * <p>
+     * El estado del barco es POSICIONADO si todas sus casillas están ocupadas, HUNDIDO si todas sus casillas están atacadas
      *
      * @return el estado del barco.
      */
     public EstadoBarco getEstado() {
-        return estado;
+        boolean todasAtacadas = true;
+        for (Casilla casilla : casillas) {
+            if (casilla.getEstado() != EstadoCasilla.ATACADA) {
+                todasAtacadas = false;
+                break;
+            }
+        }
+        if (todasAtacadas) {
+            return EstadoBarco.HUNDIDO;
+        } else {
+            return EstadoBarco.POSICIONADO;
+        }
     }
 
     /**
@@ -66,6 +81,7 @@ public class Barco {
     public String getNombre() {
         return nombre;
     }
+
 
     /**
      * Captura un array de casillas y lo asigna al barco.
