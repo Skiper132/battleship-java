@@ -11,24 +11,12 @@ public class Barco {
      * Crea un barco de tamaño especificado.
      *
      * @param tamano el tamaño del barco.
+     * @param contadorBarco el número del barco. (1 o 2 para Lanchas, 1 para Submarinos y Acorazados)
      */
-    public Barco(int longitud) {
+    public Barco(int longitud, int contadorBarco) {
         this.casillas = new Casilla[longitud];
         this.estado = EstadoBarco.NO_POSICIONADO;
-        switch (longitud) {
-            case 2:
-                this.nombre = "Lancha";
-                break;
-            case 3:
-                this.nombre = "Submarino";
-                break;
-            case 4:
-                this.nombre = "Acorazado";
-                break;
-            default:
-                this.nombre = "Barco";
-                break;
-        }
+        this.nombre = NombreBarco.obtenerNombre(longitud, contadorBarco);
     }
 
     /**
@@ -50,12 +38,25 @@ public class Barco {
     }
 
     /**
-     * Devuelve el estado del barco.
+     * Devuelve el estado del barco. TEST
+     * <p>
+     * El estado del barco es POSICIONADO si todas sus casillas están ocupadas, HUNDIDO si todas sus casillas están atacadas
      *
      * @return el estado del barco.
      */
     public EstadoBarco getEstado() {
-        return estado;
+        boolean todasAtacadas = true;
+        for (Casilla casilla : casillas) {
+            if (casilla.getEstado() != EstadoCasilla.ATACADA) {
+                todasAtacadas = false;
+                break;
+            }
+        }
+        if (todasAtacadas) {
+            return EstadoBarco.HUNDIDO;
+        } else {
+            return EstadoBarco.POSICIONADO;
+        }
     }
 
     /**
@@ -66,6 +67,7 @@ public class Barco {
     public String getNombre() {
         return nombre;
     }
+
 
     /**
      * Captura un array de casillas y lo asigna al barco.
