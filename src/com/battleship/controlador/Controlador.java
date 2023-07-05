@@ -3,18 +3,16 @@ package com.battleship.controlador;
 import com.battleship.excepciones.BarcoFueraDeRangoException;
 import com.battleship.excepciones.BarcoNoPosicionableException;
 import com.battleship.excepciones.BarcoYaPosicionadoException;
-import com.battleship.modelo.Barco;
-import com.battleship.modelo.Casilla;
-import com.battleship.modelo.Direccion;
-import com.battleship.modelo.EstadoBarco;
-import com.battleship.modelo.Tablero;
+import com.battleship.modelo.*;
 
 public class Controlador {
-    public void posicionarBarco(Tablero tablero, Barco barco, Casilla casillaInicial, Direccion direccion) throws BarcoYaPosicionadoException {
+    public void posicionarBarco(Jugador jugador, Barco barco, Casilla casillaInicial, Direccion direccion) throws BarcoYaPosicionadoException {
 
     if(barco.getEstado() == EstadoBarco.POSICIONADO) {
         throw new BarcoYaPosicionadoException();
     }
+
+    Tablero tablero = jugador.getTablero();
 
     try {
         // Utilizar el método del Tablero para asignar las casillas al barco
@@ -22,6 +20,8 @@ public class Controlador {
 
         // Configurar las casillas para el barco
         barco.setCasillas(casillasParaElBarco);
+        // Añadir el barco a la lista de barcos del tablero
+        tablero.agregarBarco(barco);
     } catch (BarcoNoPosicionableException | BarcoFueraDeRangoException e) {
         // Manejar las excepciones aquí
         System.out.println(e.getMessage());
