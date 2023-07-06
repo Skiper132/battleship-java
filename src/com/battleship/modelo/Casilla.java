@@ -8,6 +8,7 @@ import com.battleship.excepciones.CasillaYaAtacadaException;
 public class Casilla {
     private Coordenada coordenada;
     private EstadoCasilla estado;
+    private Barco barco;
 
     /**
      * Crea una casilla en la posición especificada, crea una coordenada con la fila y columna especificadas y
@@ -19,6 +20,7 @@ public class Casilla {
     public Casilla(char fila, int columna) {
         this.coordenada = new Coordenada(fila, columna);
         this.estado = EstadoCasilla.VACIA;
+        this.barco = null;
     }
 
     /**
@@ -40,6 +42,15 @@ public class Casilla {
     }
 
     /**
+     * Devuelve el barco de la casilla, si no hay barco devuelve null.
+     *
+     * @return el barco de la casilla.
+     */
+    public Barco getBarco() {
+        return barco;
+    }
+
+    /**
      * Establece el estado de la casilla.
      *
      * @param estado el estado de la casilla.
@@ -47,6 +58,16 @@ public class Casilla {
     public void setEstado(EstadoCasilla estado) {
         this.estado = estado;
     }
+
+    /**
+     * Establece el barco de la casilla.
+     *
+     * @param barco el barco de la casilla.
+     */
+    public void setBarco(Barco barco) {
+        this.barco = barco;
+    }
+
 
     public ResultadoAtaque atacarCasilla() throws CasillaYaAtacadaException {
         EstadoCasilla estadoActual = this.estado;
