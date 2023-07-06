@@ -81,6 +81,5 @@ public class Casilla {
         }
         return ResultadoAtaque.FALLA;
     }
-
 }
 

@@ -17,7 +17,7 @@ public class Tablero {
         this.casillas = new Casilla[filas][columnas];
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                this.casillas[i][j] = new Casilla((char) ('A' + i), j + 1);
+                this.casillas[i][j] = new Casilla((char) ('A' + i), j + 1); // A1, A2, A3, ... B1, B2, B3, ...
             }
         }
         this.barcos = new ArrayList<>();
