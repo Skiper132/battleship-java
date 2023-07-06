@@ -5,6 +5,6 @@ package com.battleship.excepciones;
  */
 public class CasillaYaAtacadaException extends Exception {
         public CasillaYaAtacadaException() {
-            super("La casilla ya fue atacada");
+            super("La casilla ya fue atacada. Por favor, seleccione otra.");
         }
 }

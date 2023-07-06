@@ -63,14 +63,4 @@ public class Jugador {
         }
         return true;
     }
-
-    // recibir disparo
-    public void recibirAtaque(Casilla casilla) {
-        // TODO: implementar
-    }
-
-    // disparar
-    public void disparar(Casilla casilla) {
-        // TODO: implementar
-    }
 }
