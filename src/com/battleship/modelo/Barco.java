@@ -39,24 +39,11 @@ public class Barco {
 
     /**
      * Devuelve el estado del barco.
-     * <p>
-     * El estado del barco es POSICIONADO si todas sus casillas están ocupadas, HUNDIDO si todas sus casillas están atacadas
      *
      * @return el estado del barco.
      */
     public EstadoBarco getEstado() {
-        boolean todasAtacadas = true;
-        for (Casilla casilla : casillas) {
-            if (casilla.getEstado() != EstadoCasilla.ATACADA) {
-                todasAtacadas = false;
-                break;
-            }
-        }
-        if (todasAtacadas) {
-            return EstadoBarco.HUNDIDO;
-        } else {
-            return EstadoBarco.POSICIONADO;
-        }
+        return estado;
     }
 
     /**
@@ -75,7 +62,8 @@ public class Barco {
     public void setCasillas(Casilla[] casillas) {
         this.casillas = casillas;
         for (Casilla casilla : casillas) {
-            casilla.setEstado(EstadoCasilla.OCUPADA);;
+            casilla.setEstado(EstadoCasilla.OCUPADA);
+            // Asigna el barco a cada casilla, de esta forma cada casilla sabe a qué barco pertenece.
             casilla.setBarco(this);
         }
         this.estado = EstadoBarco.POSICIONADO;
