@@ -26,4 +26,32 @@ public class Jugador {
     public Barco[] getBarcos() {
         return barcos;
     }
+
+    /**
+     * Verifica si todos los barcos del jugador están hundidos.
+     *
+     * @return true si todos los barcos están hundidos, false en caso contrario.
+     */
+    public boolean todosHundidos() {
+        for (Barco barco : barcos) {
+            if (barco.getEstado() != EstadoBarco.HUNDIDO) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Verifica si todos los barcos del jugador están posicionados.
+     * 
+     * @return true si todos los barcos están posicionados, false en caso contrario.
+     */
+    public boolean todosPosicionados() {
+        for (Barco barco : barcos) {
+            if (barco.getEstado() != EstadoBarco.POSICIONADO) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
