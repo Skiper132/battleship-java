@@ -4,9 +4,9 @@ package com.battleship.modelo;
  * Representa un barco en el tablero.
  */
 public class Barco {
+    private String nombre;
     private Casilla[] casillas;
     private EstadoBarco estado;
-    private String nombre;
     /**
      * Crea un barco de tamaño especificado.
      *
@@ -38,7 +38,7 @@ public class Barco {
     }
 
     /**
-     * Devuelve el estado del barco. TEST
+     * Devuelve el estado del barco.
      * <p>
      * El estado del barco es POSICIONADO si todas sus casillas están ocupadas, HUNDIDO si todas sus casillas están atacadas
      *
@@ -76,6 +76,7 @@ public class Barco {
         this.casillas = casillas;
         for (Casilla casilla : casillas) {
             casilla.setEstado(EstadoCasilla.OCUPADA);;
+            casilla.setBarco(this);
         }
         this.estado = EstadoBarco.POSICIONADO;
     }
