@@ -28,7 +28,6 @@ public class Controlador {
             System.out.println(e.getMessage());
         }
     }
-
     public void atacar(Jugador jugador, Casilla casilla) throws CasillaYaAtacadaException{
         // Obtener la casilla del tablero del jugador
         Casilla casillaAtacada = jugador.getTablero().getCasilla(casilla.getCoordenada());

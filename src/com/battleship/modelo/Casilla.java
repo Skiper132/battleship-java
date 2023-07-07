@@ -9,6 +9,7 @@ public class Casilla {
     private Coordenada coordenada;
     private EstadoCasilla estado;
     private Barco barco;
+    private char simbolo;
 
     /**
      * Crea una casilla en la posición especificada, crea una coordenada con la fila y columna especificadas y
@@ -21,6 +22,7 @@ public class Casilla {
         this.coordenada = new Coordenada(fila, columna);
         this.estado = EstadoCasilla.VACIA;
         this.barco = null;
+        this.simbolo = estado.getSimbolo();
     }
 
     /**
@@ -51,6 +53,15 @@ public class Casilla {
     }
 
     /**
+     * Devuelve el símbolo de la casilla.
+     *
+     * @return el símbolo de la casilla.
+     */
+    public char getSimbolo() {
+        return simbolo;
+    }
+
+    /**
      * Establece el estado de la casilla.
      *
      * @param estado el estado de la casilla.
@@ -68,7 +79,21 @@ public class Casilla {
         this.barco = barco;
     }
 
+    /**
+     * Establece el símbolo de la casilla.
+     *
+     * @param simbolo el símbolo de la casilla.
+     */
+    public void setSimbolo(char simbolo) {
+        this.simbolo = simbolo;
+    }
 
+    /**
+     * Ataca la casilla y devuelve el resultado del ataque.
+     *
+     * @return el resultado del ataque.
+     * @throws CasillaYaAtacadaException si la casilla ya está atacada.
+     */
     public ResultadoAtaque atacarCasilla() throws CasillaYaAtacadaException {
         EstadoCasilla estadoActual = this.estado;
         if (estadoActual == EstadoCasilla.ATACADA) {
@@ -78,8 +103,10 @@ public class Casilla {
 
         if (estadoActual == EstadoCasilla.OCUPADA) {
             return ResultadoAtaque.ACIERTO;
+        } else {
+            this.simbolo = '○';
+            return ResultadoAtaque.FALLA;
         }
-        return ResultadoAtaque.FALLA;
     }
 }
 
