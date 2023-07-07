@@ -68,4 +68,21 @@ public class Barco {
         }
         this.estado = EstadoBarco.POSICIONADO;
     }
+
+    /**
+     * Recorre las casillas del barco y si todas están atacadas, cambia el estado del barco a HUNDIDO.
+     */
+    public void recibirAtaque() {
+        boolean todasAtacadas = true;
+        for (Casilla casilla : casillas) {
+            if (casilla.getEstado() != EstadoCasilla.ATACADA) {
+                todasAtacadas = false;
+                break;
+            }
+        }
+        if (todasAtacadas) {
+            this.estado = EstadoBarco.HUNDIDO;
+        }
+    }
+
 }

@@ -42,4 +42,5 @@ public class Controlador {
         } catch (CasillaYaAtacadaException e) {
             System.out.println(e.getMessage());
         }
+    }
 }
