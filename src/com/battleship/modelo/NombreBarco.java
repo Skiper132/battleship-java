@@ -1,8 +1,8 @@
 package com.battleship.modelo;
 public enum NombreBarco {
-    Lancha(2, 2),
-    Submarino(3, 1),
-    Acorazado(4, 1);
+    Lancha(2, 2), // 2 lanchas de longitud 2
+    Submarino(3, 1), // 1 submarino de longitud 3
+    Acorazado(4, 1); // 1 acorazado de longitud 4
 
     public final int longitud;
     public final int cantidad;
