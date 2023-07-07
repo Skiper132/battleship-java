@@ -1,35 +1,23 @@
 package com.battleship.vista;
 
-import com.battleship.controlador.Controlador;
-import com.battleship.modelo.Casilla;
-import com.battleship.modelo.Tablero;
+import com.battleship.controlador.ControladorJuego;
+import com.battleship.utilidades.Lector;
 public class Pantalla {
     //TODO: Implementar la vista
     public static void main(String[] args) {
-        Controlador controlador = new Controlador();
-        
+        System.out.println("¡Bienvenido a Battleship! Para iniciar el juego, estableceremos los jugadores:");
+
+        System.out.println("Jugador 1, por favor ingresa tu nombre:");
+        String Jugador1 = Lector.cargarEntrada();
+        System.out.println("Jugador 2, por favor ingresa tu nombre:");
+        String Jugador2 = Lector.cargarEntrada();
+
+        System.out.println("Creando jugadores...");
+        ControladorJuego controladorJuego = new ControladorJuego(Jugador1, Jugador2);
+        System.out.println("Jugadores creados.");
     }
 
-    public static void mostrarTablero(Tablero tablero) {
-        Casilla[][] casillas = tablero.getCasillas();
-
-        // Imprime el encabezado de las columnas del tablero
-        System.out.print("  ");
-        for (int i = 0; i < casillas[0].length; i++) {
-            System.out.print(i + 1 + " ");
-        }
-        System.out.println();
-
-        // Imprime las filas del tablero
-        for (int i = 0; i < casillas.length; i++) {
-            System.out.print((char) ('A' + i) + " ");
-            for (int j = 0; j < casillas[i].length; j++) {
-                // Ya no necesitamos obtener la coordenada ni buscar la casilla en el tablero
-                Casilla casilla = casillas[i][j];
-                // Obtenemos el símbolo de la casilla y lo imprimimos
-                System.out.print(casilla.getSimbolo() + " ");
-            }
-            System.out.println();
-        }
+    public static void buclePosicionarBarcos(String jugador) {
+        
     }
 }

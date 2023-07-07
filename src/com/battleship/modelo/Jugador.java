@@ -12,6 +12,7 @@ public class Jugador {
         this.nombre = nombre;
         this.barcos = new HashMap<>();
         crearBarcos();
+        this.tablero = new Tablero();
     }
 
     public String getNombre() {

@@ -94,7 +94,7 @@ public class Casilla {
      * @return el resultado del ataque.
      * @throws CasillaYaAtacadaException si la casilla ya está atacada.
      */
-    public ResultadoAtaque atacarCasilla() throws CasillaYaAtacadaException {
+    public ResultadoAtaque atacar() throws CasillaYaAtacadaException {
         EstadoCasilla estadoActual = this.estado;
         if (estadoActual == EstadoCasilla.ATACADA) {
             throw new CasillaYaAtacadaException();
