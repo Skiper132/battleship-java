@@ -42,7 +42,7 @@ public class Jugador {
 
     /**
      * Devuelve un barco del jugador según su nombre.
-     * 
+     *
      * @param nombre el nombre del barco.
      * @return el barco.
      */
@@ -52,7 +52,7 @@ public class Jugador {
 
     /**
      * Recorre todos los barcos del jugador y devuelve true si todos están hundidos.
-     * 
+     *
      * @return true si todos los barcos están hundidos, false en caso contrario.
      */
     public boolean todosLosBarcosHundidos() {
@@ -62,15 +62,5 @@ public class Jugador {
             }
         }
         return true;
-    }
-
-    // recibir disparo
-    public void recibirAtaque(Casilla casilla) {
-        // TODO: implementar
-    }
-
-    // disparar
-    public void disparar(Casilla casilla) {
-        // TODO: implementar
     }
 }
