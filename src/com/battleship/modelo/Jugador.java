@@ -64,4 +64,18 @@ public class Jugador {
         }
         return true;
     }
+
+    /**
+     * Recorre todos los barcos del jugador y devuelve true si todos están posicionados.
+     *
+     * @return
+     */
+    public boolean todosLosBarcosPosicionados() {
+        for (Barco barco : barcos.values()) {
+            if (barco.getEstado() != EstadoBarco.POSICIONADO) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

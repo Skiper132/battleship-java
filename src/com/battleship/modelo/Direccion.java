@@ -27,4 +27,5 @@ public enum Direccion {
     public int getDesplazamientoColumna() {
         return desplazamientoColumna;
     }
+
 }

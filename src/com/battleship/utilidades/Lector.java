@@ -3,26 +3,24 @@ package com.battleship.utilidades;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-/* LectorUsuario contiene métodos para leer entradas de datos, trabaja con la clase Validador para validar
- * las entradas.
- */
-
-import com.battleship.modelo.Coordenada;
+import com.battleship.controlador.ControladorJuego;
+import com.battleship.excepciones.BarcoNoExistenteException;
+import com.battleship.excepciones.BarcoYaPosicionadoException;
 import com.battleship.excepciones.CoordenadaInvalidaException;
+import com.battleship.excepciones.DireccionInvalidaException;
+import com.battleship.modelo.Casilla;
+import com.battleship.modelo.Barco;
+import com.battleship.modelo.Direccion;
 
 public class Lector {
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private static ControladorJuego controlador = ControladorJuego.getInstancia();
+    private static Casilla ultimaCasillaCargada;
+    private static Direccion ultimaDireccionCargada;
 
-    /**
-     * Lee una entrada de datos del usuario y la retorna.
-     * Si la entrada está vacía, solicita al usuario que ingrese una entrada.
-     * Si ocurre un error de entrada/salida, muestra un mensaje de error y solicita al usuario que ingrese una entrada.
-     * 
-     * @return la entrada de datos del usuario.
-     */
     public static String cargarEntrada() {
         String entrada = "";
-        while (entrada.isEmpty()) { // .isEmpty() retorna true si la cadena está vacía.
+        while (entrada.isEmpty()) {
             try {
                 entrada = br.readLine();
             } catch (IOException e) {
@@ -33,15 +31,58 @@ public class Lector {
         return entrada;
     }
 
-    public static Coordenada cargarCoordenada() {
-        Coordenada coordenada = null;
-        while (coordenada == null) {
+    public static String extraerCasilla(String entrada) {
+        return entrada.substring(0, 2);
+    }
+
+    public static String extraerDireccion(String entrada) {
+        return entrada.substring(3, 4);
+    }
+
+    public static Barco cargarBarco() {
+        Barco barco = null;
+        while (barco == null) {
             try {
-                coordenada = Validador.convertirCoordenada(cargarEntrada());
-            } catch (CoordenadaInvalidaException e) {
-                System.out.println("Coordenada inválida, por favor intenta de nuevo.");
+                String nombreBarco = cargarEntrada();
+                barco = controlador.getBarcoNoPosicionadoPorNombre(nombreBarco);
+            } catch (BarcoNoExistenteException e) {
+                System.out.println("El barco ingresado no existe, por favor intenta de nuevo.");
+            } catch (BarcoYaPosicionadoException e) {
+                System.out.println("El barco ingresado ya está posicionado, por favor intenta de nuevo.");
             }
         }
-        return coordenada;
+        return barco;
+    }
+    public static void cargarPosicionamientoBarco() {
+        String entrada = cargarEntrada();
+        while (ultimaCasillaCargada == null || ultimaDireccionCargada == null) {
+            try {
+                ultimaCasillaCargada = controlador.getCasillaPorCadena(extraerCasilla(entrada));
+                ultimaDireccionCargada = controlador.getDireccionPorCadena(extraerDireccion(entrada));
+            } catch (CoordenadaInvalidaException | DireccionInvalidaException | StringIndexOutOfBoundsException e) {
+                System.out.println(e.getMessage() + " Por favor, intenta de nuevo.");
+                entrada = cargarEntrada();
+            }
+        }
+    }
+
+    public static Casilla getUltimaCasillaCargada() {
+        return ultimaCasillaCargada;
+    }
+
+    public static Direccion getUltimaDireccionCargada() {
+        return ultimaDireccionCargada;
+    }
+
+    public static Casilla cargarCasilla() {
+        Casilla casilla = null;
+        while (casilla == null) {
+            try {
+                casilla = controlador.getCasillaPorCadena(cargarEntrada());
+            } catch (CoordenadaInvalidaException e) {
+                System.out.println(e.getMessage() + " Por favor, intenta de nuevo.");
+            }
+        }
+        return casilla;
     }
 }
