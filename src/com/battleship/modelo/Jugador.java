@@ -12,6 +12,7 @@ public class Jugador {
         this.nombre = nombre;
         this.barcos = new HashMap<>();
         crearBarcos();
+        this.tablero = new Tablero();
     }
 
     public String getNombre() {
@@ -58,6 +59,20 @@ public class Jugador {
     public boolean todosLosBarcosHundidos() {
         for (Barco barco : barcos.values()) {
             if (barco.getEstado() != EstadoBarco.HUNDIDO) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Recorre todos los barcos del jugador y devuelve true si todos están posicionados.
+     *
+     * @return
+     */
+    public boolean todosLosBarcosPosicionados() {
+        for (Barco barco : barcos.values()) {
+            if (barco.getEstado() != EstadoBarco.POSICIONADO) {
                 return false;
             }
         }

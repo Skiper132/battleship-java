@@ -6,10 +6,10 @@ package com.battleship.modelo;
  * calcular las coordenadas de las casillas que ocupará el barco.
  */
 public enum Direccion {
-    NORTE(0, -1),
-    SUR(0, 1),
-    ESTE(1, 0),
-    OESTE(-1, 0);
+    NORTE(-1, 0),
+    SUR(1, 0),
+    ESTE(0, 1),
+    OESTE(0, -1);
 
     private final int desplazamientoFila;
     private final int desplazamientoColumna;
@@ -27,4 +27,5 @@ public enum Direccion {
     public int getDesplazamientoColumna() {
         return desplazamientoColumna;
     }
+
 }
