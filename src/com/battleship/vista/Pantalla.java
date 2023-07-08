@@ -3,7 +3,7 @@ package com.battleship.vista;
 import com.battleship.controlador.ControladorJuego;
 import com.battleship.utilidades.Lector;
 public class Pantalla {
-    private static ControladorJuego controlador = new ControladorJuego();
+    private static ControladorJuego controlador = ControladorJuego.getInstancia();
     public static void main(String[] args) {
         System.out.println("¡Bienvenido a Battleship! Para iniciar el juego, estableceremos los jugadores:");
 
@@ -13,12 +13,12 @@ public class Pantalla {
         System.out.println("¡Bienvenido " + jugador1 + "!");
 
         System.out.println("Jugador 2, por favor ingresa tu nombre:");
-        String Jugador = Lector.cargarEntrada();
-        controlador.crearJugador(Jugador);
-        System.out.println("¡Bienvenido " + Jugador + "!\n");
+        String jugador2 = Lector.cargarEntrada();
+        controlador.crearJugador(jugador2);
+        System.out.println("¡Bienvenido " + jugador2 + "!\n");
         // Colocamos los barcos de los jugadores en un bucle
         for (int i = 0; i < 2; i++) {
-            controlador.setJugadorActivoPorNombre(i == 0 ? jugador1 : Jugador); 
+            controlador.setJugadorActivoPorNombre(i == 0 ? jugador1 : jugador2); 
             System.out.println("¡Ahora vamos a posicionar los barcos! " + controlador.getJugadorActivo().getNombre() + ", por favor posiciona tus barcos.");
             buclePosicionarBarcos();
         }
@@ -44,7 +44,7 @@ public class Pantalla {
             imprimirBarcosNoPosicionados();
 
             System.out.println("Escribe el nombre del barco que quieras posicionar:");
-            String nombreBarco = Lector.cargarEntrada();
+            String nombreBarco = Lector.cargarBarco();
 
             System.out.println("Elige la casilla donde quieras posicionar el barco y su dirección \n Por ejemplo: 'B5 N' Intentará posicionar el barco a partir de la casilla B5 en dirección norte (hacia arriba):");
             Lector.cargarPosicionamientoBarco();
@@ -58,8 +58,6 @@ public class Pantalla {
             } else {
                 System.out.println("No se pudo posicionar el barco debido a un error, por favor intenta de nuevo.");
             }
-
-            
         }
     }
 }

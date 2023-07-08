@@ -39,7 +39,7 @@ public class Lector {
         return entrada.substring(3, 4);
     }
 
-    public static Barco cargarBarco() {
+    public static String cargarBarco() {
         Barco barco = null;
         while (barco == null) {
             try {
@@ -51,20 +51,22 @@ public class Lector {
                 System.out.println("El barco ingresado ya está posicionado, por favor intenta de nuevo.");
             }
         }
-        return barco;
+        return barco.getNombre();
     }
     public static void cargarPosicionamientoBarco() {
         String entrada = cargarEntrada();
-        while (ultimaCasillaCargada == null || ultimaDireccionCargada == null) {
+        do {
             try {
                 ultimaCasillaCargada = controlador.getCasillaPorCadena(extraerCasilla(entrada));
                 ultimaDireccionCargada = controlador.getDireccionPorCadena(extraerDireccion(entrada));
+                break;  // si todo va bien, salimos del bucle
             } catch (CoordenadaInvalidaException | DireccionInvalidaException | StringIndexOutOfBoundsException e) {
                 System.out.println(e.getMessage() + " Por favor, intenta de nuevo.");
                 entrada = cargarEntrada();
             }
-        }
+        } while (true);
     }
+
 
     public static Casilla getUltimaCasillaCargada() {
         return ultimaCasillaCargada;

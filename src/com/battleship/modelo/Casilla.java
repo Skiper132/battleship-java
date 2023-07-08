@@ -68,7 +68,9 @@ public class Casilla {
      */
     public void setEstado(EstadoCasilla estado) {
         this.estado = estado;
+        this.simbolo = estado.getSimbolo();
     }
+
 
     /**
      * Establece el barco de la casilla.

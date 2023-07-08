@@ -79,7 +79,7 @@ public class ControladorJuego {
     }
 
     public boolean todosLosBarcosPosicionados() {
-        for (Barco barco : this.jugadorActivo.getTablero().getBarcos()) {
+        for (Barco barco : this.jugadorActivo.getBarcos().values()) {
             if (barco.getEstado() == EstadoBarco.NO_POSICIONADO) {
                 return false;
             }
@@ -96,13 +96,14 @@ public class ControladorJuego {
          * [Submarino]
          * [Acorazado]
          */
-        for (Barco barco : this.jugadorActivo.getTablero().getBarcos()) {
+        for (Barco barco : this.jugadorActivo.getBarcos().values()) {
             if (barco.getEstado() == EstadoBarco.NO_POSICIONADO) {
                 barcosNoPosicionados += "[" + barco.getNombre() + "] Tamaño: " + barco.getLongitud() + " casillas\n";
             }
         }
         return barcosNoPosicionados;
     }
+
     public Barco getBarcoPorNombre(String nombre) {
         return buscarBarcoPorNombre(nombre);
     }
@@ -129,7 +130,15 @@ public class ControladorJuego {
         }
 
         char letra = coordenada.charAt(0);
-        int numero = Integer.parseInt(coordenada.substring(1));
+        char posibleNumero = coordenada.charAt(1);
+        int numero;
+
+        if (!Character.isDigit(posibleNumero)) {
+            throw new CoordenadaInvalidaException();
+        } else {
+            numero = Character.getNumericValue(posibleNumero);
+        }
+
         if (letra < 'A' || letra > 'J' || numero < 1 || numero > 10) {
             throw new CoordenadaInvalidaException();
         }
@@ -138,8 +147,9 @@ public class ControladorJuego {
         return casillaConvertida;
     }
 
+
     private Barco buscarBarcoPorNombre(String nombre) {
-        for (Barco barco : this.jugadorActivo.getTablero().getBarcos()) {
+        for (Barco barco : this.jugadorActivo.getBarcos().values()) {
             if (barco.getNombre().equals(nombre)) {
                 return barco;
             }
