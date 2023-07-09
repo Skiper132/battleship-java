@@ -177,7 +177,7 @@ public class ControladorJuego {
             numero = Character.getNumericValue(posibleNumero);
         }
 
-        if (letra < 'A' || letra > 'J' || numero < 1) {
+        if (letra < 'A' || letra > 'I' || numero < 1) {
             throw new CoordenadaInvalidaException();
         }
 

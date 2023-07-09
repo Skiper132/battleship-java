@@ -1,8 +1,13 @@
 //Aldo Apicella, Edwin Ureña, Luis Montenegro, Anyel Zhang
 package com.battleship;
 
+import com.battleship.excepciones.BarcoFueraDeRangoException;
+import com.battleship.excepciones.BarcoNoPosicionableException;
+import com.battleship.excepciones.CasillaYaAtacadaException;
+import com.battleship.excepciones.JugadorExistenteException;
+import com.battleship.excepciones.LimiteJugadoresException;
+
 import com.battleship.controlador.ControladorJuego;
-import com.battleship.excepciones.*;
 import com.battleship.vista.Pantalla;
 import com.battleship.utilidades.Lector;
 
@@ -41,21 +46,21 @@ public class Aplicacion {
         // Posicionamiento de los barcos
         for (String nombreJugador : nombresJugadores) {
             controlador.setJugadorActivoPorNombre(nombreJugador);
-            
+
             pantalla.imprimirMensajeInicioPosicionamiento();
             pantalla.imprimirOpcionesDePosicionamiento();
-        
+
             while (!controlador.getJugadorActivo().todosLosBarcosPosicionados()) {
-                
+
                 String opcion = Lector.cargarEntrada();
                 switch (opcion) {
                     case "1":
                         while (!controlador.getJugadorActivo().todosLosBarcosPosicionados()) {
                             pantalla.limpiarPantalla();
-        
+
                             pantalla.ventanaPosicionamiento();
                             pantalla.pedirDatosBarcoAPosicionar();
-        
+
                             try {
                                 controlador.posicionarBarco(Lector.getUltimoBarcoCargado(), Lector.getUltimaCasillaCargada(), Lector.getUltimaDireccionCargada());
                                 pantalla.imprimirExitoPosicionamiento();

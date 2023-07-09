@@ -101,7 +101,7 @@ public class Casilla {
         if (estadoActual == EstadoCasilla.ATACADA) {
             throw new CasillaYaAtacadaException();
         }
-        this.estado = EstadoCasilla.ATACADA;
+        setEstado(EstadoCasilla.ATACADA);
 
         if (estadoActual == EstadoCasilla.OCUPADA) {
             return ResultadoAtaque.ACIERTO;
