@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import com.battleship.controlador.ControladorJuego;
 import com.battleship.excepciones.BarcoNoExistenteException;
 import com.battleship.excepciones.BarcoYaPosicionadoException;
-import com.battleship.excepciones.CasillaYaAtacadaException;
 import com.battleship.excepciones.CoordenadaInvalidaException;
 import com.battleship.excepciones.DireccionInvalidaException;
 import com.battleship.modelo.Casilla;
