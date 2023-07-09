@@ -4,9 +4,9 @@ package com.battleship.modelo;
  * Representa un barco en el tablero.
  */
 public class Barco {
+    private String nombre;
     private Casilla[] casillas;
     private EstadoBarco estado;
-    private String nombre;
     /**
      * Crea un barco de tamaño especificado.
      *
@@ -38,25 +38,12 @@ public class Barco {
     }
 
     /**
-     * Devuelve el estado del barco. TEST
-     * <p>
-     * El estado del barco es POSICIONADO si todas sus casillas están ocupadas, HUNDIDO si todas sus casillas están atacadas
+     * Devuelve el estado del barco.
      *
      * @return el estado del barco.
      */
     public EstadoBarco getEstado() {
-        boolean todasAtacadas = true;
-        for (Casilla casilla : casillas) {
-            if (casilla.getEstado() != EstadoCasilla.ATACADA) {
-                todasAtacadas = false;
-                break;
-            }
-        }
-        if (todasAtacadas) {
-            return EstadoBarco.HUNDIDO;
-        } else {
-            return EstadoBarco.POSICIONADO;
-        }
+        return estado;
     }
 
     /**
@@ -75,8 +62,27 @@ public class Barco {
     public void setCasillas(Casilla[] casillas) {
         this.casillas = casillas;
         for (Casilla casilla : casillas) {
-            casilla.setEstado(EstadoCasilla.OCUPADA);;
+            casilla.setEstado(EstadoCasilla.OCUPADA);
+            // Asigna el barco a cada casilla, de esta forma cada casilla sabe a qué barco pertenece.
+            casilla.setBarco(this);
         }
         this.estado = EstadoBarco.POSICIONADO;
     }
+
+    /**
+     * Recorre las casillas del barco y si todas están atacadas, cambia el estado del barco a HUNDIDO.
+     */
+    public void recibirAtaque() {
+        boolean todasAtacadas = true;
+        for (Casilla casilla : casillas) {
+            if (casilla.getEstado() != EstadoCasilla.ATACADA) {
+                todasAtacadas = false;
+                break;
+            }
+        }
+        if (todasAtacadas) {
+            this.estado = EstadoBarco.HUNDIDO;
+        }
+    }
+
 }

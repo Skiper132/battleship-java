@@ -20,6 +20,10 @@ public class Coordenada {
         return columna;
     }
 
+    public String toString() {
+        return fila + "" + columna;
+    }
+
     public void setColumna(int i) {
         this.columna = i;
     }

@@ -36,6 +36,6 @@ El desarrollo actual del juego de Batalla Naval (BattleShip) sigue el patrón de
 - [x] Modelar las entidades principales del juego.
 - [x] Implementar el posicionamiento de Barcos en un Tablero.
 - [ ] Implementar el ataque de un Jugador a un Tablero.
-- [ ] Asignar nombres a los barcos dependiendo de su tamaño y diferenciar cada uno.
+- [x] Asignar nombres a los barcos dependiendo de su tamaño y diferenciar cada uno.
 - [ ] Implementar la lógica del juego.
 - [ ] Implementar la interfaz de usuario del juego.

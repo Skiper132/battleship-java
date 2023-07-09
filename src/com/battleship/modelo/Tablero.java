@@ -10,6 +10,9 @@ public class Tablero {
     Casilla[][] casillas;
     List<Barco> barcos;
 
+    /**
+     * Constructor de la clase Tablero.
+     */
     public Tablero() {
         int filas = 9;
         int columnas = 9;
@@ -17,7 +20,7 @@ public class Tablero {
         this.casillas = new Casilla[filas][columnas];
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                this.casillas[i][j] = new Casilla((char) ('A' + i), j + 1);
+                this.casillas[i][j] = new Casilla((char) ('A' + i), j + 1); // A1, A2, A3, ..., I9 
             }
         }
         this.barcos = new ArrayList<>();
@@ -98,4 +101,6 @@ public class Tablero {
     public void agregarBarco(Barco barco) {
         barcos.add(barco);
     }
+
+    
 }

@@ -8,6 +8,8 @@ import com.battleship.excepciones.CasillaYaAtacadaException;
 public class Casilla {
     private Coordenada coordenada;
     private EstadoCasilla estado;
+    private Barco barco;
+    private char simbolo;
 
     /**
      * Crea una casilla en la posición especificada, crea una coordenada con la fila y columna especificadas y
@@ -19,6 +21,8 @@ public class Casilla {
     public Casilla(char fila, int columna) {
         this.coordenada = new Coordenada(fila, columna);
         this.estado = EstadoCasilla.VACIA;
+        this.barco = null;
+        this.simbolo = estado.getSimbolo();
     }
 
     /**
@@ -40,26 +44,71 @@ public class Casilla {
     }
 
     /**
+     * Devuelve el barco de la casilla, si no hay barco devuelve null.
+     *
+     * @return el barco de la casilla.
+     */
+    public Barco getBarco() {
+        return barco;
+    }
+
+    /**
+     * Devuelve el símbolo de la casilla.
+     *
+     * @return el símbolo de la casilla.
+     */
+    public char getSimbolo() {
+        return simbolo;
+    }
+
+    /**
      * Establece el estado de la casilla.
      *
      * @param estado el estado de la casilla.
      */
     public void setEstado(EstadoCasilla estado) {
         this.estado = estado;
+        this.simbolo = estado.getSimbolo();
     }
 
-    public ResultadoAtaque atacarCasilla() throws CasillaYaAtacadaException {
+
+    /**
+     * Establece el barco de la casilla.
+     *
+     * @param barco el barco de la casilla.
+     */
+    public void setBarco(Barco barco) {
+        this.barco = barco;
+    }
+
+    /**
+     * Establece el símbolo de la casilla.
+     *
+     * @param simbolo el símbolo de la casilla.
+     */
+    public void setSimbolo(char simbolo) {
+        this.simbolo = simbolo;
+    }
+
+    /**
+     * Ataca la casilla y devuelve el resultado del ataque.
+     *
+     * @return el resultado del ataque.
+     * @throws CasillaYaAtacadaException si la casilla ya está atacada.
+     */
+    public ResultadoAtaque atacar() throws CasillaYaAtacadaException {
         EstadoCasilla estadoActual = this.estado;
         if (estadoActual == EstadoCasilla.ATACADA) {
             throw new CasillaYaAtacadaException();
         }
-        this.estado = EstadoCasilla.ATACADA;
+        setEstado(EstadoCasilla.ATACADA);
 
         if (estadoActual == EstadoCasilla.OCUPADA) {
             return ResultadoAtaque.ACIERTO;
+        } else {
+            this.simbolo = 'o';
+            return ResultadoAtaque.FALLA;
         }
-        return ResultadoAtaque.FALLA;
     }
-
 }
 
