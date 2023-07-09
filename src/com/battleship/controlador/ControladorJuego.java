@@ -5,18 +5,28 @@ import com.battleship.modelo.*;
 
 import java.util.HashMap;
 import java.util.Random;
-
+/**
+ * Controlador del juego.
+ * Se encarga de crear los jugadores, cambiar el jugador activo, mostrar el tablero, etc.
+ * Singleton.
+ */
 public class ControladorJuego {
     private static ControladorJuego instanciaUnica = null;
+    // Los jugadores del juego. El HashMap tiene como clave el nombre del jugador y como valor el objeto Jugador.
     private HashMap<String, Jugador> jugadores;
+    // El jugador que está jugando activomente.
     private Jugador jugadorActivo;
 
-    // Constructor privado
+    // Constructor privado para que no se pueda instanciar desde afuera.
     private ControladorJuego() {
         this.jugadores = new HashMap<>();
         this.jugadorActivo = null;
     }
 
+    /**
+     * Devuelve la instancia única del controlador.
+     * @return la instancia única del controlador.
+     */
     public static ControladorJuego getInstancia() { // Singleton
         if (instanciaUnica == null) {
             instanciaUnica = new ControladorJuego();
@@ -28,22 +38,48 @@ public class ControladorJuego {
         return jugadorActivo;
     }
 
+    /**
+     * Devuelve el jugador según su nombre.
+     *
+     * @param nombre el nombre del jugador.
+     * @return el jugador.
+     */
     public Jugador getJugador(String nombre) {
         return this.jugadores.get(nombre);
     }
 
+
+
+    /**
+     * Establece el jugador activo según su nombre.
+     * 
+     * @param nombre el nombre del jugador.
+     */
     public void setJugadorActivoPorNombre(String nombre) {
         this.jugadorActivo = this.jugadores.get(nombre);
     }
 
+    /**
+     * Devuelve el jugador que no es el jugador activo.
+     *
+     * @return el jugador que no es el jugador activo.
+     */
     public Jugador getEnemigo() {
-        for (Jugador jugador : jugadores.values()) {
+        for (Jugador jugador : jugadores.values()) { // Recorre todos los jugadores
             if (jugador != jugadorActivo) {
                 return jugador;
             }
         }
         return null; // Nunca debería llegar a este punto si siempre hay dos jugadores.
     }
+
+    /**
+     * Crea un jugador y lo agrega al HashMap jugadores.
+     *
+     * @param nombre el nombre del jugador.
+     * @throws JugadorExistenteException si ya existe un jugador con ese nombre.
+     * @throws LimiteJugadoresException si ya hay dos jugadores.
+     */
     public void crearJugador(String nombre) throws JugadorExistenteException, LimiteJugadoresException{
         if(this.jugadores.size() < 2) {
             if(this.jugadores.containsKey(nombre)) {
@@ -53,33 +89,54 @@ public class ControladorJuego {
                 this.jugadores.put(nombre, jugador);
             }
         } else {
-            throw new LimiteJugadoresException(); // Lanza excepción
+            throw new LimiteJugadoresException(); // Lanza excepción si ya hay dos jugadores
         }
     }
 
-    public void cambiarJugadorActual() {
+    /**
+     * Establece el jugador activo al otro jugador.
+     */
+    public void cambiarJugadorActivo() {
         for (String nombre : jugadores.keySet()) { // Recorre todos los nombres de los jugadores
             if (!jugadorActivo.getNombre().equals(nombre)) {
                 jugadorActivo = jugadores.get(nombre);
-                break;
+                break; // Termina el bucle cuando encuentra el otro jugador
             }
         }
     }
 
 
 
-
+    /**
+     * Muestra el tablero del jugador activo.
+     * @return
+     */
     public String mostrarTablero() {
         return generarStringTablero(jugadorActivo, false);
     }
 
+    /**
+     * Muestra el tablero del enemigo.
+     * @return
+     */
     public String mostrarTableroEnemigo() {
         Jugador enemigo = getEnemigo();
         return generarStringTablero(enemigo, true);
     }
 
+    /**
+     * 
+     * Este método se utiliza para generar una representación visual del tablero de un jugador en forma de cadena de caracteres.
+     * La representación muestra las casillas del tablero junto con los números de columna y las letras de fila correspondientes.
+     * Dependiendo del valor del parámetro "esEnemigo", las casillas ocupadas pueden mostrarse o no. 
+     *
+     * @param jugador el jugador.
+     * @param esEnemigo si el jugador es el enemigo.
+     * @return el String con el tablero.
+     */
     private String generarStringTablero(Jugador jugador, boolean esEnemigo) {
         StringBuilder tableroStr = new StringBuilder();
+
 
         Casilla[][] casillas = jugador.getTablero().getCasillas();
 
@@ -90,11 +147,13 @@ public class ControladorJuego {
         }
         tableroStr.append("\n");
 
+        // Generar letras de filas y casillas
         for (int i = 0; i < casillas.length; i++) {
             tableroStr.append((char) ('A' + i)).append(" ");
 
             for (int j = 0; j < casillas[i].length; j++) {
                 Casilla casilla = casillas[i][j];
+                // Si es el tablero del enemigo, no se muestran las casillas ocupadas
                 if (esEnemigo && casilla.getEstado() == EstadoCasilla.OCUPADA) {
                     tableroStr.append("- ");
                 } else {
@@ -108,6 +167,10 @@ public class ControladorJuego {
         return tableroStr.toString();
     }
 
+    /**
+     * Muestra los barcos no posicionados del jugador activo.
+     * @return
+     */
     public String mostrarBarcosNoPosicionados() {
         StringBuilder barcosNoPosicionados = new StringBuilder();
         for (Barco barco : this.jugadorActivo.getBarcos().values()) {
@@ -118,20 +181,24 @@ public class ControladorJuego {
         return barcosNoPosicionados.toString();
     }
 
+    /**
+     * Muestra los barcos posicionados del jugador activo.
+     * @return
+     */
     public String mostrarBarcosPosicionados() {
         StringBuilder barcosPosicionados = new StringBuilder();
 
         barcosPosicionados.append("Nombre\tLongitud\tCoordenadas\n");
-        for (Barco barco : this.jugadorActivo.getBarcos().values()) {
-            barcosPosicionados.append(barco.getNombre()).append("\t").append(barco.getLongitud());
+        for (Barco barco : this.jugadorActivo.getBarcos().values()) { // Recorre todos los barcos del jugador
+            barcosPosicionados.append(barco.getNombre()).append("\t").append(barco.getLongitud()); // Nombre y longitud
 
             // Generamos las coordenadas
             StringBuilder coordenadas = new StringBuilder();
-            for (Casilla casilla : barco.getCasillas()) {
-                if (coordenadas.length() != 0) {
-                    coordenadas.append(", ");
+            for (Casilla casilla : barco.getCasillas()) { // Recorre todas las casillas del barco
+                if (coordenadas.length() != 0) {     // Si no es la primera coordenada, añade una coma
+                    coordenadas.append(", "); // Añade una coma
                 }
-                coordenadas.append(casilla.getCoordenada().toString());
+                coordenadas.append(casilla.getCoordenada().toString()); // Añade la coordenada
             }
 
             barcosPosicionados.append("\t").append(coordenadas).append("\n");
@@ -142,10 +209,23 @@ public class ControladorJuego {
     }
 
 
+    /**
+     * Devuelve un barco según su nombre.
+     * 
+     * @param nombre el nombre del barco.
+     * @return el barco.
+     */
     public Barco getBarcoPorNombre(String nombre) {
         return buscarBarcoPorNombre(nombre);
     }
 
+    /**
+     * Devuelve el barco no posicionado del jugador activo según su nombre.
+     * @param nombre el nombre del barco.
+     * @return el barco.
+     * @throws BarcoNoExistenteException si el barco no existe.
+     * @throws BarcoYaPosicionadoException si el barco ya está posicionado.
+     */
     public Barco getBarcoNoPosicionadoPorNombre(String nombre) throws BarcoNoExistenteException, BarcoYaPosicionadoException {
         Barco barco = buscarBarcoPorNombre(nombre);
 
@@ -160,6 +240,12 @@ public class ControladorJuego {
         return barco;
     }
 
+    /**
+     * Devuelve una casilla del tablero del jugador activo según su coordenada en forma de cadena de caracteres.
+     * @param coordenada la coordenada en forma de cadena de caracteres.
+     * @return la casilla.
+     * @throws CoordenadaInvalidaException si la coordenada es inválida.
+     */
     public Casilla getCasillaPorCadena(String coordenada) throws CoordenadaInvalidaException {
         Casilla casillaConvertida = null;
 
@@ -167,34 +253,51 @@ public class ControladorJuego {
             throw new CoordenadaInvalidaException();
         }
 
+        // Dividimos la coordenada en letra y número
         char letra = coordenada.charAt(0);
         char posibleNumero = coordenada.charAt(1);
         int numero;
 
+        // Comprobamos que la letra sea una letra válida y el número un número válido
         if (!Character.isDigit(posibleNumero)) {
             throw new CoordenadaInvalidaException();
         } else {
             numero = Character.getNumericValue(posibleNumero);
         }
 
+        // Comprobamos que esté dentro del tablero
         if (letra < 'A' || letra > 'I' || numero < 1) {
             throw new CoordenadaInvalidaException();
         }
 
+        // Convertimos la coordenada a casilla
         casillaConvertida = this.jugadorActivo.getTablero().getCasillas()[letra - 'A'][numero - 1];
         return casillaConvertida;
     }
 
 
+    /**
+     * Devuelve un barco del jugador activo según su nombre.
+     * 
+     * @param nombre el nombre del barco.
+     * @return el barco.
+     */
     private Barco buscarBarcoPorNombre(String nombre) {
         for (Barco barco : this.jugadorActivo.getBarcos().values()) {
             if (barco.getNombre().equals(nombre)) {
                 return barco;
             }
         }
-        return null;
+        return null; // No se ha encontrado el barco
     }
 
+    /**
+     * Devuelve una dirección según su cadena de caracteres.
+     *
+     * @param direccion la dirección en forma de cadena de caracteres.
+     * @return la dirección.
+     * @throws DireccionInvalidaException si la dirección es inválida.
+     */
     public Direccion getDireccionPorCadena(String direccion) throws DireccionInvalidaException {
         Direccion direccionConvertida = null;
 
@@ -218,7 +321,17 @@ public class ControladorJuego {
         return direccionConvertida;
     }
 
+    /**
+     * Este método posiciona un barco en el tablero del jugador activo según la casilla inicial y la dirección.
+     *
+     * @param barco el barco a posicionar.
+     * @param casillaInicial la casilla inicial.
+     * @param direccion la dirección.
+     * @throws BarcoNoPosicionableException si el barco no se puede posicionar.
+     * @throws BarcoFueraDeRangoException si el barco se sale del tablero.
+     */
     public void posicionarBarco(Barco barco, Casilla casillaInicial, Direccion direccion) throws BarcoNoPosicionableException, BarcoFueraDeRangoException {
+        // Obtener el tablero del jugador
         Tablero tablero = this.jugadorActivo.getTablero();
 
         // Verificar las casillas en el tablero para ver si se puede posicionar el barco
@@ -229,7 +342,14 @@ public class ControladorJuego {
         tablero.agregarBarco(barco);
     }
 
-
+    /**
+     * Este método ataca una casilla del tablero del jugador especificado.
+     *
+     * @param jugador el jugador.
+     * @param casilla la casilla.
+     * @return el resultado del ataque.
+     * @throws CasillaYaAtacadaException si la casilla ya ha sido atacada.
+     */
     public ResultadoAtaque atacarCasilla(Jugador jugador, Casilla casilla) throws CasillaYaAtacadaException{
         // Obtener la casilla del tablero del jugador
         Casilla casillaAtacada = jugador.getTablero().getCasilla(casilla.getCoordenada());
@@ -241,28 +361,53 @@ public class ControladorJuego {
         return casillaAtacada.atacar();
     }
 
+    /**
+     * Devuelve el mensaje del resultado del ataque. (ej: Has fallado)
+     * 
+     * @param resultadoAtaque el resultado del ataque.
+     * @return el mensaje.
+     */
     public String mostrarResultadoAtaque(ResultadoAtaque resultadoAtaque) {
         return resultadoAtaque.getMensaje();
     }
-    public boolean verificarVictoria() {
+    /**
+     * Comprueba si todos los barcos del jugador activo están hundidos, es decir, si ha perdido.
+     *
+     * @return true si ha perdido, false si no.
+     */
+    public boolean verificarDerrota() {
         if (jugadorActivo.todosLosBarcosHundidos()) {
             return true;
         }
         return false;
     }
 
-    public void autoDestruirBarcos() {
+    /**
+     * Hunde todos los barcos del jugador activo.
+     * 
+     * @see Barco#hundir()
+     */
+    public void autoDestruirBarcos() { 
+        // Recorre todos los barcos del jugador activo
         for (Barco barco : jugadorActivo.getBarcos().values()) {
+            // Recorre todas las casillas del barco
             for (Casilla casilla : barco.getCasillas()) {
+                // Si la casilla ya ha sido atacada, salta a la siguiente iteración
                 if (casilla.getEstado() == EstadoCasilla.ATACADA) {
-                    continue; // Salta a la siguiente iteración
+                    continue;
                 }
+                // Si no, ataca la casilla
                 casilla.setEstado(EstadoCasilla.ATACADA);;
                 barco.recibirAtaque();
             }
         }
     }
 
+    /**
+     * Posiciona todos los barcos del jugador activo aleatoriamente, utilizando el método posicionarBarco()
+     * y generando coordenadas y direcciones aleatorias, los seguirá intentando hasta que encuentre una posición válida.
+     *
+     */
     public void posicionarBarcosAleatoriamente() {
         Random rand = new Random();
 
