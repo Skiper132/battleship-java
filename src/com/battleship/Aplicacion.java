@@ -56,6 +56,7 @@ public class Aplicacion {
                 switch (opcion) {
                     case "1":
                         while (!controlador.getJugadorActivo().todosLosBarcosPosicionados()) {
+                            esperar(2000);
                             pantalla.limpiarPantalla();
 
                             pantalla.ventanaPosicionamiento();
