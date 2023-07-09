@@ -2,62 +2,61 @@ package com.battleship.vista;
 
 import com.battleship.controlador.ControladorJuego;
 import com.battleship.utilidades.Lector;
+
 public class Pantalla {
-    private static ControladorJuego controlador = ControladorJuego.getInstancia();
-    public static void main(String[] args) {
-        System.out.println("¡Bienvenido a Battleship! Para iniciar el juego, estableceremos los jugadores:");
 
-        System.out.println("Jugador 1, por favor ingresa tu nombre:");
-        String jugador1 = Lector.cargarEntrada();
-        controlador.crearJugador(jugador1);
-        System.out.println("¡Bienvenido " + jugador1 + "!");
+    ControladorJuego controlador;
 
-        System.out.println("Jugador 2, por favor ingresa tu nombre:");
-        String jugador2 = Lector.cargarEntrada();
-        controlador.crearJugador(jugador2);
-        System.out.println("¡Bienvenido " + jugador2 + "!\n");
-        // Colocamos los barcos de los jugadores en un bucle
-        for (int i = 0; i < 2; i++) {
-            controlador.setJugadorActivoPorNombre(i == 0 ? jugador1 : jugador2); 
-            System.out.println("¡Ahora vamos a posicionar los barcos! " + controlador.getJugadorActivo().getNombre() + ", por favor posiciona tus barcos.");
-            buclePosicionarBarcos();
-        }
+    public Pantalla() {
+        this.controlador = ControladorJuego.getInstancia();
     }
 
-    public static void cambiarJugadorActivo(String nombreJugador) {
-        // Cambia el jugador activo al jugador con el nombre especificado
-        controlador.setJugadorActivoPorNombre(nombreJugador);
+    public void mostrarBienvenida() {
+        System.out.println("\n¡Bienvenido a Batalla Naval!");
+        System.out.println("Por favor, introduce el nombre de los jugadores...\n");
     }
 
-    public static void imprimirTablero() {
+    public String pedirNombreJugador(int numeroJugador) {
+        System.out.print("Jugador " + numeroJugador + ": ");
+        return Lector.cargarEntrada();
+    }
+
+    public void mostrarExitoCreacionJugador(String nombreJugador) {
+        System.out.println ("Jugador " + nombreJugador + " creado con éxito.");
+    }
+
+    public void mostrarTurnoJugador() {
+        System.out.println("\nTurno de " + controlador.getJugadorActivo().getNombre());
+    }
+
+    public void mostrarTablero() {
         System.out.println(controlador.mostrarTablero());
     }
 
-    public static void imprimirBarcosNoPosicionados() {
+    public void mostrarBarcosNoPosicionados() {
+        System.out.println("Lista de barcos por posicionar:\n");
         System.out.println(controlador.mostrarBarcosNoPosicionados());
     }
-    public static void buclePosicionarBarcos() {
-        while (!controlador.todosLosBarcosPosicionados()) {
-            imprimirTablero();
 
-            System.out.println("Listado de Barcos para posicionar en tu tablero:");
-            imprimirBarcosNoPosicionados();
-
-            System.out.println("Escribe el nombre del barco que quieras posicionar:");
-            String nombreBarco = Lector.cargarBarco();
-
-            System.out.println("Elige la casilla donde quieras posicionar el barco y su dirección \n Por ejemplo: 'B5 N' Intentará posicionar el barco a partir de la casilla B5 en dirección norte (hacia arriba):");
-            Lector.cargarPosicionamientoBarco();
-
-            String nombreCasilla = Lector.getUltimaCasillaCargada().getCoordenada().toString();
-            String nombreDireccion = Lector.getUltimaDireccionCargada().toString();
-            System.out.printf("Intentando posicionar el barco %s en la casilla %s en dirección %s...\n", nombreBarco, nombreCasilla, nombreDireccion);
-            Boolean barcoPosicionado = controlador.posicionarBarco(controlador.getBarcoPorNombre(nombreBarco), Lector.getUltimaCasillaCargada(), Lector.getUltimaDireccionCargada());
-            if (barcoPosicionado) {
-                System.out.println("Barco posicionado correctamente.");
-            } else {
-                System.out.println("No se pudo posicionar el barco debido a un error, por favor intenta de nuevo.");
-            }
-        }
+    public void mostrarMensajePosicionamiento(String nombreJugador) {
+        System.out.println("\n" + nombreJugador + ", posiciona tus barcos:\n");
     }
+
+    public void pedirDatosBarcoAPosicionar() {
+        System.out.println("\nPor favor, introduce el nombre del barco que deseas posicionar:");
+        Lector.cargarBarco();
+        System.out.println("Introduce la casilla inicial y la dirección (N, S, E, O) en donde deseas posicionar tu " + Lector.getUltimoBarcoCargado().getNombre() + " separado por un espacio. Ejemplo: A1 N");
+        Lector.cargarPosicionamientoBarco();
+        System.out.println("\nBarco: " + Lector.getUltimoBarcoCargado().getNombre() + " | Casilla inicial: " + Lector.getUltimaCasillaCargada().getCoordenada().toString() + " | Dirección: " + Lector.getUltimaDireccionCargada().name());
+        System.out.println("Posicionando barco...");
+    }
+
+    public void mostrarError(String mensaje) {
+        System.out.println("\nError: " + mensaje + "\n");
+    }
+
+    public void mostrarExitoPosicionamiento() {
+        System.out.println("\n¡Barco posicionado con éxito!\n");
+    }
+
 }
