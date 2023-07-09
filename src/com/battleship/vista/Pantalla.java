@@ -59,4 +59,9 @@ public class Pantalla {
         System.out.println("\n¡Barco posicionado con éxito!\n");
     }
 
+    public static void clean() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
 }
