@@ -16,40 +16,100 @@ public class Aplicacion {
         this.pantalla = new Pantalla();
     }
 
-    public void iniciarJuego() {
+    public static void esperar(int milisegundos) {
+        try {
+            Thread.sleep(milisegundos);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void iniciarJuego() throws InterruptedException {
         // Bienvenida y creación de jugadores
         pantalla.mostrarBienvenida();
         String[] nombresJugadores = new String[2];
 
-        for (int i = 1; i <= 2; i++) {
-            nombresJugadores[i - 1] = pantalla.pedirNombreJugador(i);
+        for (int i = 0; i < 2; i++) {
+            nombresJugadores[i] = pantalla.pedirNombreJugador(i + 1);
             try {
-                controlador.crearJugador(nombresJugadores[i - 1]);
+                controlador.crearJugador(nombresJugadores[i]);
             } catch (JugadorExistenteException | LimiteJugadoresException e) {
-                pantalla.mostrarError(e.getMessage());
+                pantalla.imprimirError(e.getMessage());
                 i--; // Permite al usuario ingresar el nombre nuevamente
             }
         }
         // Posicionamiento de los barcos
         for (String nombreJugador : nombresJugadores) {
             controlador.setJugadorActivoPorNombre(nombreJugador);
-            while (!controlador.todosLosBarcosPosicionados()) {
-                pantalla.mostrarMensajePosicionamiento(nombreJugador);
-                pantalla.mostrarTablero();
-                pantalla.mostrarBarcosNoPosicionados();
-                pantalla.pedirDatosBarcoAPosicionar();
-
-                try {
-                    controlador.posicionarBarco(Lector.getUltimoBarcoCargado(), Lector.getUltimaCasillaCargada(), Lector.getUltimaDireccionCargada());
-                    pantalla.mostrarExitoPosicionamiento();
-                } catch (BarcoNoPosicionableException | BarcoFueraDeRangoException e) {
-                    pantalla.mostrarError(e.getMessage());
+            
+            pantalla.imprimirMensajeInicioPosicionamiento();
+            pantalla.imprimirOpcionesDePosicionamiento();
+        
+            while (!controlador.getJugadorActivo().todosLosBarcosPosicionados()) {
+                
+                String opcion = Lector.cargarEntrada();
+                switch (opcion) {
+                    case "1":
+                        while (!controlador.getJugadorActivo().todosLosBarcosPosicionados()) {
+                            pantalla.limpiarPantalla();
+        
+                            pantalla.ventanaPosicionamiento();
+                            pantalla.pedirDatosBarcoAPosicionar();
+        
+                            try {
+                                controlador.posicionarBarco(Lector.getUltimoBarcoCargado(), Lector.getUltimaCasillaCargada(), Lector.getUltimaDireccionCargada());
+                                pantalla.imprimirExitoPosicionamiento();
+                            } catch (BarcoNoPosicionableException | BarcoFueraDeRangoException e) {
+                                pantalla.imprimirError(e.getMessage());
+                            }
+                        }
+                        break;
+                    case "2":
+                        controlador.posicionarBarcosAleatoriamente();
+                        break;
+                    default:
+                        pantalla.imprimirError("Opción inválida.");
                 }
             }
         }
+
+        // Se establece el primer jugador creado como activo antes de iniciar
+        controlador.setJugadorActivoPorNombre(nombresJugadores[0]);
+
+        // Inicio del juego
+        while(!controlador.verificarVictoria()) {
+            esperar(2000);
+            pantalla.limpiarPantalla();
+
+            pantalla.mostrarTurnoJugador();
+            pantalla.ventanaTableros();
+
+            String entrada = pantalla.pedirCasilla();
+
+            if (entrada.equalsIgnoreCase("EXIT")){
+                controlador.autoDestruirBarcos();
+            } else {
+                Lector.cargarCasilla(entrada);
+                try {
+                    pantalla.imprimirResultadoAtaque(controlador.atacarCasilla(controlador.getEnemigo(), Lector.getUltimaCasillaCargada()));
+                    controlador.cambiarJugadorActual();
+                } catch (CasillaYaAtacadaException e) {
+                    pantalla.imprimirError(e.getMessage());
+                }
+            }
+        }
+
+        // Fin del juego
+        pantalla.imprimirGanador();
+        for (String nombreJugador : nombresJugadores) {
+            controlador.setJugadorActivoPorNombre(nombreJugador);
+            pantalla.ventanaInformacionFinal();
+            controlador.cambiarJugadorActual();
+        }
+
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         new Aplicacion().iniciarJuego();
     }
 

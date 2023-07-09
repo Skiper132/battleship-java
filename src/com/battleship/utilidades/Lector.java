@@ -11,7 +11,6 @@ import com.battleship.excepciones.DireccionInvalidaException;
 import com.battleship.modelo.Casilla;
 import com.battleship.modelo.Barco;
 import com.battleship.modelo.Direccion;
-
 public class Lector {
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static ControladorJuego controlador = ControladorJuego.getInstancia();
@@ -79,15 +78,15 @@ public class Lector {
         return ultimoBarcoCargado;
     }
 
-    public static Casilla cargarCasilla() {
-        Casilla casilla = null;
-        while (casilla == null) {
+    public static void cargarCasilla(String entrada) {
+        do {
             try {
-                casilla = controlador.getCasillaPorCadena(cargarEntrada());
-            } catch (CoordenadaInvalidaException e) {
+                ultimaCasillaCargada = controlador.getCasillaPorCadena(entrada);
+                break;
+            } catch (CoordenadaInvalidaException |StringIndexOutOfBoundsException e) {
                 System.out.println(e.getMessage() + " Por favor, intenta de nuevo.");
+                entrada = cargarEntrada();
             }
-        }
-        return casilla;
+        } while (true);
     }
 }
