@@ -1,35 +1,62 @@
 package com.battleship.vista;
 
-import com.battleship.controlador.Controlador;
-import com.battleship.modelo.Casilla;
-import com.battleship.modelo.Tablero;
+import com.battleship.controlador.ControladorJuego;
+import com.battleship.utilidades.Lector;
+
 public class Pantalla {
-    //TODO: Implementar la vista
-    public static void main(String[] args) {
-        Controlador controlador = new Controlador();
-        
+
+    ControladorJuego controlador;
+
+    public Pantalla() {
+        this.controlador = ControladorJuego.getInstancia();
     }
 
-    public static void mostrarTablero(Tablero tablero) {
-        Casilla[][] casillas = tablero.getCasillas();
-
-        // Imprime el encabezado de las columnas del tablero
-        System.out.print("  ");
-        for (int i = 0; i < casillas[0].length; i++) {
-            System.out.print(i + 1 + " ");
-        }
-        System.out.println();
-
-        // Imprime las filas del tablero
-        for (int i = 0; i < casillas.length; i++) {
-            System.out.print((char) ('A' + i) + " ");
-            for (int j = 0; j < casillas[i].length; j++) {
-                // Ya no necesitamos obtener la coordenada ni buscar la casilla en el tablero
-                Casilla casilla = casillas[i][j];
-                // Obtenemos el símbolo de la casilla y lo imprimimos
-                System.out.print(casilla.getSimbolo() + " ");
-            }
-            System.out.println();
-        }
+    public void mostrarBienvenida() {
+        System.out.println("\n¡Bienvenido a Batalla Naval!");
+        System.out.println("Por favor, introduce el nombre de los jugadores...\n");
     }
+
+    public String pedirNombreJugador(int numeroJugador) {
+        System.out.print("Jugador " + numeroJugador + ": ");
+        return Lector.cargarEntrada();
+    }
+
+    public void mostrarExitoCreacionJugador(String nombreJugador) {
+        System.out.println ("Jugador " + nombreJugador + " creado con éxito.");
+    }
+
+    public void mostrarTurnoJugador() {
+        System.out.println("\nTurno de " + controlador.getJugadorActivo().getNombre());
+    }
+
+    public void mostrarTablero() {
+        System.out.println(controlador.mostrarTablero());
+    }
+
+    public void mostrarBarcosNoPosicionados() {
+        System.out.println("Lista de barcos por posicionar:\n");
+        System.out.println(controlador.mostrarBarcosNoPosicionados());
+    }
+
+    public void mostrarMensajePosicionamiento(String nombreJugador) {
+        System.out.println("\n" + nombreJugador + ", posiciona tus barcos:\n");
+    }
+
+    public void pedirDatosBarcoAPosicionar() {
+        System.out.println("\nPor favor, introduce el nombre del barco que deseas posicionar:");
+        Lector.cargarBarco();
+        System.out.println("Introduce la casilla inicial y la dirección (N, S, E, O) en donde deseas posicionar tu " + Lector.getUltimoBarcoCargado().getNombre() + " separado por un espacio. Ejemplo: A1 N");
+        Lector.cargarPosicionamientoBarco();
+        System.out.println("\nBarco: " + Lector.getUltimoBarcoCargado().getNombre() + " | Casilla inicial: " + Lector.getUltimaCasillaCargada().getCoordenada().toString() + " | Dirección: " + Lector.getUltimaDireccionCargada().name());
+        System.out.println("Posicionando barco...");
+    }
+
+    public void mostrarError(String mensaje) {
+        System.out.println("\nError: " + mensaje + "\n");
+    }
+
+    public void mostrarExitoPosicionamiento() {
+        System.out.println("\n¡Barco posicionado con éxito!\n");
+    }
+
 }

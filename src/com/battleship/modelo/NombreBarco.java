@@ -15,7 +15,10 @@ public enum NombreBarco {
     public static String obtenerNombre(int longitud, int numeroBarco) {
         for (NombreBarco barco : NombreBarco.values()) { // values() devuelve un array con todos los valores del enum
             if (barco.longitud == longitud) {
-                return barco.name() + " " + numeroBarco; // name() devuelve el nombre del enum
+                if(barco.cantidad > 1) {
+                    return barco.name() + " " + numeroBarco;
+                }
+                return barco.name();
             }
         }
         throw new IllegalArgumentException("Longitud de barco inválida: " + longitud);
