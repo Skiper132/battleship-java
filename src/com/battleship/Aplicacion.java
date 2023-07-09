@@ -115,6 +115,7 @@ public class Aplicacion {
         }
 
     }
+    
     public static void main(String[] args) throws InterruptedException {
         new Aplicacion().iniciarJuego();
     }
