@@ -1,0 +1,67 @@
+@startuml
+class com.battleship.controlador.ControladorJuego{
+-   jugadorActivo: Jugador 
+-   jugadores: HashMap<String, Jugador>
+}
+class com.battleship.Aplicacion{
+#   controlador: ControladorJuego 
+#   pantalla: Pantalla 
+}
+class com.battleship.modelo.Barco {
+-   casillas: Casilla[] 
+-   estado: EstadoBarco 
+-   nombre: String 
+}
+class com.battleship.modelo.Casilla {
+-   barco: Barco 
+-   coordenada: Coordenada 
+-   estado: EstadoCasilla 
+-   simbolo: char
+
++ atacar(): ResultadoAtaque
+
+}
+class com.battleship.modelo.Jugador {
+-   barcos: HashMap&lt;String, Barco
+-   nombre: String 
+-   tablero: Tablero 
+}
+class com.battleship.modelo.Tablero {
+  
+#   barcos: <List>Barco
+#   casillas: Casilla[][] 
+}
+class com.battleship.utilidades.Lector {
+}
+class com.battleship.vista.Pantalla{
+  
+#   controlador: ControladorJuego 
+}
+enum com.battleship.modelo.Direccion {
+# desplazamientoColumna: int
+# desplazamientoFila: int 
+}
+enum com.battleship.modelo.EstadoBarco 
+enum com.battleship.modelo.EstadoCasilla{
+# simbolo: char
+}
+enum com.battleship.modelo.NombreBarco{
+# longitud: int
+# cantidad: int
+}
+enum com.battleship.modelo.ResultadoAtaque {
+# mensaje: String
+}
+class com.battleship.modelo.Coordenada {
+# fila: int
+# columna: int
+}
+com.battleship.vista <... com.battleship.controlador
+com.battleship.controlador <...> com.battleship.modelo
+com.battleship.Aplicacion <... com.battleship.controlador
+com.battleship.Aplicacion <... com.battleship.vista
+com.battleship.Aplicacion ...> com.battleship.utilidades
+com.battleship.vista ...> com.battleship.utilidades
+com.battleship.controlador <... com.battleship.utilidades
+
+@enduml
