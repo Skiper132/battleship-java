@@ -2,7 +2,7 @@ package com.battleship.modelo;
 
 public enum EstadoCasilla {
     VACIA('-'),
-    OCUPADA('█'),
+    OCUPADA('■'),
     ATACADA('X');
 
     private final char simbolo;
