@@ -44,6 +44,8 @@ public class ControladorJuego {
         }
         return null; // Nunca debería llegar a este punto si siempre hay dos jugadores.
     }
+
+    //Este método permite crear un nuevo jugador con el nombre especificado.
     public void crearJugador(String nombre) throws JugadorExistenteException, LimiteJugadoresException{
         if(this.jugadores.size() < 2) {
             if(this.jugadores.containsKey(nombre)) {
@@ -78,6 +80,11 @@ public class ControladorJuego {
         return generarStringTablero(enemigo, true);
     }
 
+    /*
+    Este método se utiliza para generar una representación visual del tablero de un jugador en forma de cadena de caracteres.
+    La representación muestra las casillas del tablero junto con los números de columna y las letras de fila correspondientes.
+    Dependiendo del valor del parámetro "esEnemigo", las casillas ocupadas pueden mostrarse o no. 
+    */
     private String generarStringTablero(Jugador jugador, boolean esEnemigo) {
         StringBuilder tableroStr = new StringBuilder();
 
@@ -118,6 +125,10 @@ public class ControladorJuego {
         return barcosNoPosicionados.toString();
     }
 
+    /**
+    Este método genera una representación en forma de cadena de caracteres de los barcos posicionados por el jugador.
+    La cadena generada muestra el nombre, longitud y coordenadas de cada barco posicionado.
+    */
     public String mostrarBarcosPosicionados() {
         StringBuilder barcosPosicionados = new StringBuilder();
 

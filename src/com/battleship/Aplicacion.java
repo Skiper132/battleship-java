@@ -21,6 +21,7 @@ public class Aplicacion {
         this.pantalla = new Pantalla();
     }
 
+    // Pausa la ejecución del programa durante un tiempo especificado en milisegundos.
     public static void esperar(int milisegundos) {
         try {
             Thread.sleep(milisegundos);
@@ -114,7 +115,7 @@ public class Aplicacion {
         }
 
     }
-
+    
     public static void main(String[] args) throws InterruptedException {
         new Aplicacion().iniciarJuego();
     }
