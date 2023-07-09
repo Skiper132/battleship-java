@@ -4,6 +4,7 @@ import com.battleship.excepciones.*;
 import com.battleship.modelo.*;
 
 import java.util.HashMap;
+import java.util.Random;
 
 public class ControladorJuego {
     private static ControladorJuego instanciaUnica = null;
@@ -35,6 +36,14 @@ public class ControladorJuego {
         this.jugadorActivo = this.jugadores.get(nombre);
     }
 
+    public Jugador getEnemigo() {
+        for (Jugador jugador : jugadores.values()) {
+            if (jugador != jugadorActivo) {
+                return jugador;
+            }
+        }
+        return null; // Nunca debería llegar a este punto si siempre hay dos jugadores.
+    }
     public void crearJugador(String nombre) throws JugadorExistenteException, LimiteJugadoresException{
         if(this.jugadores.size() < 2) {
             if(this.jugadores.containsKey(nombre)) {
@@ -48,69 +57,90 @@ public class ControladorJuego {
         }
     }
 
-    public void cambioTurno() {
-        if (jugadorActivo.getNombre().equals(jugadores.get(0).getNombre())) {
-            jugadorActivo = jugadores.get(1);
-        } else {
-            jugadorActivo = jugadores.get(0);
+    public void cambiarJugadorActual() {
+        for (String nombre : jugadores.keySet()) { // Recorre todos los nombres de los jugadores
+            if (!jugadorActivo.getNombre().equals(nombre)) {
+                jugadorActivo = jugadores.get(nombre);
+                break;
+            }
         }
     }
 
-    public String generarStringTablero(Jugador jugador) {
-        String tableroStr = "";
+
+
+
+    public String mostrarTablero() {
+        return generarStringTablero(jugadorActivo, false);
+    }
+
+    public String mostrarTableroEnemigo() {
+        Jugador enemigo = getEnemigo();
+        return generarStringTablero(enemigo, true);
+    }
+
+    private String generarStringTablero(Jugador jugador, boolean esEnemigo) {
+        StringBuilder tableroStr = new StringBuilder();
 
         Casilla[][] casillas = jugador.getTablero().getCasillas();
 
-        tableroStr += "  ";
+        tableroStr.append("  ");
         // Generar números de columnas
         for (int i = 0; i < casillas[0].length; i++) { // 1, 2, 3, ... 9
-            tableroStr += (i + 1) + " ";
+            tableroStr.append(i + 1).append(" ");
         }
-        tableroStr += "\n";
+        tableroStr.append("\n");
 
         for (int i = 0; i < casillas.length; i++) {
-            tableroStr += (char) ('A' + i) + " ";
+            tableroStr.append((char) ('A' + i)).append(" ");
 
             for (int j = 0; j < casillas[i].length; j++) {
                 Casilla casilla = casillas[i][j];
-                tableroStr += casilla.getSimbolo() + " ";
+                if (esEnemigo && casilla.getEstado() == EstadoCasilla.OCUPADA) {
+                    tableroStr.append("- ");
+                } else {
+                    tableroStr.append(casilla.getSimbolo()).append(" ");
+                }
             }
 
-            tableroStr += "\n";
+            tableroStr.append("\n");
         }
 
-        return tableroStr;
-    }
-
-    public String mostrarTablero() {
-        return generarStringTablero(jugadorActivo);
-    }
-
-    public boolean todosLosBarcosPosicionados() {
-        for (Barco barco : this.jugadorActivo.getBarcos().values()) {
-            if (barco.getEstado() == EstadoBarco.NO_POSICIONADO) {
-                return false;
-            }
-        }
-        return true;
+        return tableroStr.toString();
     }
 
     public String mostrarBarcosNoPosicionados() {
-        String barcosNoPosicionados = "";
-        /**
-         * Mostrar en lista:
-         * [Lancha 1]
-         * [Lancha 2]
-         * [Submarino]
-         * [Acorazado]
-         */
+        StringBuilder barcosNoPosicionados = new StringBuilder();
         for (Barco barco : this.jugadorActivo.getBarcos().values()) {
             if (barco.getEstado() == EstadoBarco.NO_POSICIONADO) {
-                barcosNoPosicionados += "[" + barco.getNombre() + "] Tamaño: " + barco.getLongitud() + " casillas\n";
+                barcosNoPosicionados.append("[").append(barco.getNombre()).append("] Tamaño: ").append(barco.getLongitud()).append(" casillas\n");
             }
         }
-        return barcosNoPosicionados;
+        return barcosNoPosicionados.toString();
     }
+
+    public String mostrarBarcosPosicionados() {
+        StringBuilder barcosPosicionados = new StringBuilder();
+
+        barcosPosicionados.append("Nombre\tLongitud\tCoordenadas\n");
+        for (Barco barco : this.jugadorActivo.getBarcos().values()) {
+            barcosPosicionados.append(barco.getNombre()).append("\t").append(barco.getLongitud());
+
+            // Generamos las coordenadas
+            StringBuilder coordenadas = new StringBuilder();
+            for (Casilla casilla : barco.getCasillas()) {
+                if (coordenadas.length() != 0) {
+                    coordenadas.append(", ");
+                }
+                coordenadas.append(casilla.getCoordenada().toString());
+            }
+
+            barcosPosicionados.append("\t").append(coordenadas).append("\n");
+
+        }
+
+        return barcosPosicionados.toString();
+    }
+
 
     public Barco getBarcoPorNombre(String nombre) {
         return buscarBarcoPorNombre(nombre);
@@ -200,19 +230,61 @@ public class ControladorJuego {
     }
 
 
-    public void atacarCasilla(Jugador jugador, Casilla casilla) throws CasillaYaAtacadaException{
+    public ResultadoAtaque atacarCasilla(Jugador jugador, Casilla casilla) throws CasillaYaAtacadaException{
         // Obtener la casilla del tablero del jugador
         Casilla casillaAtacada = jugador.getTablero().getCasilla(casilla.getCoordenada());
         // Obtener el barco de la casilla, si existe
-        Barco barco = casillaAtacada.getBarco();
-        try {
-            ResultadoAtaque resultado = casillaAtacada.atacar();
-            if (barco != null) {
+        if (casillaAtacada.getBarco() != null) {
+            Barco barco = casillaAtacada.getBarco();
+            barco.recibirAtaque();
+        }
+        return casillaAtacada.atacar();
+    }
+
+    public String mostrarResultadoAtaque(ResultadoAtaque resultadoAtaque) {
+        return resultadoAtaque.getMensaje();
+    }
+    public boolean verificarVictoria() {
+        if (jugadorActivo.todosLosBarcosHundidos()) {
+            return true;
+        }
+        return false;
+    }
+
+    public void autoDestruirBarcos() {
+        for (Barco barco : jugadorActivo.getBarcos().values()) {
+            for (Casilla casilla : barco.getCasillas()) {
+                if (casilla.getEstado() == EstadoCasilla.ATACADA) {
+                    continue; // Salta a la siguiente iteración
+                }
+                casilla.setEstado(EstadoCasilla.ATACADA);;
                 barco.recibirAtaque();
             }
-            System.out.println(resultado.getMensaje());
-        } catch (CasillaYaAtacadaException e) {
-            System.out.println(e.getMessage());
+        }
+    }
+
+    public void posicionarBarcosAleatoriamente() {
+        Random rand = new Random();
+
+        for (Barco barco : this.jugadorActivo.getBarcos().values()) {
+            // Inténtalo hasta que encuentres una posición válida
+            while (true) {
+                // Genera coordenadas aleatorias para la casilla inicial
+                int filaAleatoria = rand.nextInt(9); // Considerando que el tablero es de 10x10
+                int columnaAleatoria = rand.nextInt(9);
+
+                // Genera una dirección aleatoria
+                Direccion[] direcciones = Direccion.values();
+                Direccion direccionAleatoria = direcciones[rand.nextInt(direcciones.length)];
+
+                try {
+                    Casilla casillaInicial = this.jugadorActivo.getTablero().getCasillas()[filaAleatoria][columnaAleatoria];
+                    posicionarBarco(barco, casillaInicial, direccionAleatoria);
+                    break; // Si no se lanzó ninguna excepción, el barco se ha posicionado correctamente. Salir del bucle.
+                } catch (BarcoNoPosicionableException | BarcoFueraDeRangoException e) {
+                    // Si el barco no pudo ser posicionado en esa casilla o con esa dirección, simplemente intenta otra vez.
+                }
+            }
         }
     }
 }
