@@ -106,7 +106,7 @@ public class Casilla {
         if (estadoActual == EstadoCasilla.OCUPADA) {
             return ResultadoAtaque.ACIERTO;
         } else {
-            this.simbolo = '○';
+            this.simbolo = 'o';
             return ResultadoAtaque.FALLA;
         }
     }
