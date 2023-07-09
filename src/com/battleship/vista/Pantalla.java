@@ -1,6 +1,7 @@
 package com.battleship.vista;
 
 import com.battleship.controlador.ControladorJuego;
+import com.battleship.modelo.ResultadoAtaque;
 import com.battleship.utilidades.Lector;
 
 public class Pantalla {
@@ -21,25 +22,27 @@ public class Pantalla {
         return Lector.cargarEntrada();
     }
 
-    public void mostrarExitoCreacionJugador(String nombreJugador) {
+    public void imprimirExitoCreacionJugador(String nombreJugador) {
         System.out.println ("Jugador " + nombreJugador + " creado con éxito.");
+    }
+
+    public void imprimirMensajeInicioPosicionamiento() {
+        System.out.println("\n" + controlador.getJugadorActivo().getNombre() + ", posiciona tus barcos:\n");
     }
 
     public void mostrarTurnoJugador() {
         System.out.println("\nTurno de " + controlador.getJugadorActivo().getNombre());
     }
 
-    public void mostrarTablero() {
+    public void imprimirTablero() {
         System.out.println(controlador.mostrarTablero());
     }
-
-    public void mostrarBarcosNoPosicionados() {
+    public void imprimirTableroEnemigo(){
+        System.out.println(controlador.mostrarTableroEnemigo());
+    }
+    public void imprimirBarcosNoPosicionados() {
         System.out.println("Lista de barcos por posicionar:\n");
         System.out.println(controlador.mostrarBarcosNoPosicionados());
-    }
-
-    public void mostrarMensajePosicionamiento(String nombreJugador) {
-        System.out.println("\n" + nombreJugador + ", posiciona tus barcos:\n");
     }
 
     public void pedirDatosBarcoAPosicionar() {
@@ -51,17 +54,68 @@ public class Pantalla {
         System.out.println("Posicionando barco...");
     }
 
-    public void mostrarError(String mensaje) {
+    public void imprimirError(String mensaje) {
         System.out.println("\nError: " + mensaje + "\n");
     }
 
-    public void mostrarExitoPosicionamiento() {
+    public void imprimirExitoPosicionamiento() {
         System.out.println("\n¡Barco posicionado con éxito!\n");
     }
+    public void imprimirResultadoAtaque(ResultadoAtaque resultadoAtaque) {
+        System.out.println(controlador.mostrarResultadoAtaque(resultadoAtaque));
+    }
 
-    public static void clean() {
+    public void ventanaPosicionamiento() {
+        imprimirMensajeInicioPosicionamiento();
+        imprimirTablero();
+        imprimirBarcosNoPosicionados();
+    }
+
+    public void imprimirOpcionesDePosicionamiento() {
+        System.out.println("""
+                ¿Cómo quieres posicionar tus barcos?
+                [1] Manualmente
+                [2] Aleatoriamente
+                """);
+    }
+
+    public void limpiarPantalla() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+    public void ventanaTableros() {
+        System.out.println("\nTu tablero:\n");
+        imprimirTablero();
+        System.out.println("\nTablero enemigo (" + controlador.getEnemigo().getNombre() + "):\n");
+        imprimirTableroEnemigo();
+    }
 
+    public String pedirCasilla() {
+        System.out.println("Introduce la casilla que deseas atacar (Ejemplo: A1) o escribe 'EXIT' para rendirte:)");
+        return Lector.cargarEntrada();
+    }
+
+    public void imprimirGanador() {
+        System.out.println("\n¡" + controlador.getEnemigo().getNombre() + " ha ganado la partida!");;
+        System.out.println("Imprimiendo ubicaciones de barcos de los jugadores...");
+    }
+
+    public void imprimirBarcosPosicionados(){
+        System.out.println(controlador.mostrarBarcosPosicionados());
+    }
+
+    public void imprimirJugador() {
+        System.out.println(controlador.getJugadorActivo().getNombre());
+    }
+
+    public void ventanaInformacionFinal() {
+        imprimirJugador();
+        imprimirTablero();
+        imprimirBarcosPosicionados();
+    }
+
+    public void mensajeSalida() {
+        System.out.println("\n¡Gracias por jugar a Batalla Naval!");
+        System.out.println("Presiona ENTER para salir...");
+    }
 }
