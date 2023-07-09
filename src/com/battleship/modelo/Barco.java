@@ -4,31 +4,19 @@ package com.battleship.modelo;
  * Representa un barco en el tablero.
  */
 public class Barco {
+    private String nombre;
     private Casilla[] casillas;
     private EstadoBarco estado;
-    private String nombre;
     /**
      * Crea un barco de tamaño especificado.
      *
      * @param tamano el tamaño del barco.
+     * @param contadorBarco el número del barco. (1 o 2 para Lanchas, 1 para Submarinos y Acorazados)
      */
-    public Barco(int longitud) {
+    public Barco(int longitud, int contadorBarco) {
         this.casillas = new Casilla[longitud];
         this.estado = EstadoBarco.NO_POSICIONADO;
-        switch (longitud) {
-            case 2:
-                this.nombre = "Lancha";
-                break;
-            case 3:
-                this.nombre = "Submarino";
-                break;
-            case 4:
-                this.nombre = "Acorazado";
-                break;
-            default:
-                this.nombre = "Barco";
-                break;
-        }
+        this.nombre = NombreBarco.obtenerNombre(longitud, contadorBarco);
     }
 
     /**
@@ -67,14 +55,34 @@ public class Barco {
         return nombre;
     }
 
+
     /**
      * Captura un array de casillas y lo asigna al barco.
      */
     public void setCasillas(Casilla[] casillas) {
         this.casillas = casillas;
         for (Casilla casilla : casillas) {
-            casilla.setEstado(EstadoCasilla.OCUPADA);;
+            casilla.setEstado(EstadoCasilla.OCUPADA);
+            // Asigna el barco a cada casilla, de esta forma cada casilla sabe a qué barco pertenece.
+            casilla.setBarco(this);
         }
         this.estado = EstadoBarco.POSICIONADO;
     }
+
+    /**
+     * Recorre las casillas del barco y si todas están atacadas, cambia el estado del barco a HUNDIDO.
+     */
+    public void recibirAtaque() {
+        boolean todasAtacadas = true;
+        for (Casilla casilla : casillas) {
+            if (casilla.getEstado() != EstadoCasilla.ATACADA) {
+                todasAtacadas = false;
+                break;
+            }
+        }
+        if (todasAtacadas) {
+            this.estado = EstadoBarco.HUNDIDO;
+        }
+    }
+
 }

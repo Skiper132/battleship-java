@@ -8,6 +8,8 @@ import com.battleship.excepciones.CasillaYaAtacadaException;
 public class Casilla {
     private Coordenada coordenada;
     private EstadoCasilla estado;
+    private Barco barco;
+    private char simbolo;
 
     /**
      * Crea una casilla en la posición especificada, crea una coordenada con la fila y columna especificadas y
@@ -19,6 +21,8 @@ public class Casilla {
     public Casilla(char fila, int columna) {
         this.coordenada = new Coordenada(fila, columna);
         this.estado = EstadoCasilla.VACIA;
+        this.barco = null;
+        this.simbolo = estado.getSimbolo();
     }
 
     /**
@@ -40,36 +44,71 @@ public class Casilla {
     }
 
     /**
+     * Devuelve el barco de la casilla, si no hay barco devuelve null.
+     *
+     * @return el barco de la casilla.
+     */
+    public Barco getBarco() {
+        return barco;
+    }
+
+    /**
+     * Devuelve el símbolo de la casilla.
+     *
+     * @return el símbolo de la casilla.
+     */
+    public char getSimbolo() {
+        return simbolo;
+    }
+
+    /**
      * Establece el estado de la casilla.
      *
      * @param estado el estado de la casilla.
      */
     public void setEstado(EstadoCasilla estado) {
         this.estado = estado;
+        this.simbolo = estado.getSimbolo();
     }
 
-    public ResultadoAtaque atacarCasilla() throws CasillaYaAtacadaException {
-        // TODO: implementar ((tentativo)))
 
-        /*
-         * Si el estado de la casilla es VACIA, se cambia el estado a ATACADA y devuelve FALLO,
-         * Si el estado de la casilla es OCUPADA, se cambia el estado a ATACADA y devuelve ACIERTO,
-         * Si el estado de la casilla es ATACADA, se lanza una excepción CasillaYaAtacadaException.
-         * 
-         * Posiblemente, podriamos almacenar el resultado de los ataques que se hagan a un barco para poder
-         * determinar si el barco se hundió o no.
-         */
-        if (this.estado == EstadoCasilla.ATACADA) {
+    /**
+     * Establece el barco de la casilla.
+     *
+     * @param barco el barco de la casilla.
+     */
+    public void setBarco(Barco barco) {
+        this.barco = barco;
+    }
+
+    /**
+     * Establece el símbolo de la casilla.
+     *
+     * @param simbolo el símbolo de la casilla.
+     */
+    public void setSimbolo(char simbolo) {
+        this.simbolo = simbolo;
+    }
+
+    /**
+     * Ataca la casilla y devuelve el resultado del ataque.
+     *
+     * @return el resultado del ataque.
+     * @throws CasillaYaAtacadaException si la casilla ya está atacada.
+     */
+    public ResultadoAtaque atacar() throws CasillaYaAtacadaException {
+        EstadoCasilla estadoActual = this.estado;
+        if (estadoActual == EstadoCasilla.ATACADA) {
             throw new CasillaYaAtacadaException();
         }
+        setEstado(EstadoCasilla.ATACADA);
 
-        this.estado = EstadoCasilla.ATACADA;
-
-        if (this.estado == EstadoCasilla.OCUPADA) {
+        if (estadoActual == EstadoCasilla.OCUPADA) {
             return ResultadoAtaque.ACIERTO;
+        } else {
+            this.simbolo = 'o';
+            return ResultadoAtaque.FALLA;
         }
-
-        return ResultadoAtaque.FALLA;
     }
 }
 

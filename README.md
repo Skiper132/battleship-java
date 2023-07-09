@@ -28,3 +28,14 @@ El desarrollo actual del juego de Batalla Naval (BattleShip) sigue el patrón de
 - Modelado de Barcos, Casillas y Jugadores: Hemos creado clases para representar las principales entidades del juego. Por ejemplo, la clase Barco en com.battleship.modelo puede posicionarse en un conjunto de Casilla, y los Jugador tienen asociados un conjunto de Barco y dos Tablero, uno propio y uno del enemigo.
 
 - Estructura del Tablero: Cada Tablero está compuesto por un array 2D de Casilla. Cada Casilla tiene una Coordenada asociada y un estado que puede ser VACIA, OCUPADA o ATACADA.
+
+- Posicionamiento de Barcos: Hemos implementado un método para posicionar un Barco en un Tablero. Este método comprueba que el Barco no se salga del Tablero, que no se solape con otro Barco y que no se intente posicionar un Barco ya posicionado.
+
+## Lista de Tareas
+- [x] Crear excepciones personalizadas para el juego.
+- [x] Modelar las entidades principales del juego.
+- [x] Implementar el posicionamiento de Barcos en un Tablero.
+- [ ] Implementar el ataque de un Jugador a un Tablero.
+- [x] Asignar nombres a los barcos dependiendo de su tamaño y diferenciar cada uno.
+- [ ] Implementar la lógica del juego.
+- [ ] Implementar la interfaz de usuario del juego.
