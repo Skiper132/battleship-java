@@ -17,6 +17,7 @@ public class Lector {
     private static ControladorJuego controlador = ControladorJuego.getInstancia();
     private static Casilla ultimaCasillaCargada;
     private static Direccion ultimaDireccionCargada;
+    private static Barco ultimoBarcoCargado;
 
     public static String cargarEntrada() {
         String entrada = "";
@@ -39,19 +40,17 @@ public class Lector {
         return entrada.substring(3, 4);
     }
 
-    public static String cargarBarco() {
-        Barco barco = null;
-        while (barco == null) {
+    public static void cargarBarco() {
+        String entrada = cargarEntrada();
+        do {
             try {
-                String nombreBarco = cargarEntrada();
-                barco = controlador.getBarcoNoPosicionadoPorNombre(nombreBarco);
-            } catch (BarcoNoExistenteException e) {
-                System.out.println("El barco ingresado no existe, por favor intenta de nuevo.");
-            } catch (BarcoYaPosicionadoException e) {
-                System.out.println("El barco ingresado ya está posicionado, por favor intenta de nuevo.");
+                ultimoBarcoCargado = controlador.getBarcoNoPosicionadoPorNombre(entrada);
+                break;  // si todo va bien, salimos del bucle
+            } catch (BarcoNoExistenteException | BarcoYaPosicionadoException e) {
+                System.out.println(e.getMessage() + " Por favor, intenta de nuevo.");
+                entrada = cargarEntrada();
             }
-        }
-        return barco.getNombre();
+        } while (true);
     }
     public static void cargarPosicionamientoBarco() {
         String entrada = cargarEntrada();
@@ -74,6 +73,10 @@ public class Lector {
 
     public static Direccion getUltimaDireccionCargada() {
         return ultimaDireccionCargada;
+    }
+
+    public static Barco getUltimoBarcoCargado() {
+        return ultimoBarcoCargado;
     }
 
     public static Casilla cargarCasilla() {

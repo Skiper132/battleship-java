@@ -10,7 +10,7 @@ public class ControladorJuego {
     private HashMap<String, Jugador> jugadores;
     private Jugador jugadorActivo;
 
-    public ControladorJuego() {
+    private ControladorJuego() {
         this.jugadores = new HashMap<>();
         this.jugadorActivo = null;
     }
@@ -34,43 +34,49 @@ public class ControladorJuego {
         this.jugadorActivo = this.jugadores.get(nombre);
     }
 
-    public void crearJugador(String nombre) {
-        Jugador jugador = new Jugador(nombre);
-        this.jugadores.put(nombre, jugador);
+    public void crearJugador(String nombre) throws JugadorExistenteException, LimiteJugadoresException{
+        if(this.jugadores.size() < 2) {
+            if(this.jugadores.containsKey(nombre)) {
+                throw new JugadorExistenteException(); // Lanza excepción
+            } else {
+                Jugador jugador = new Jugador(nombre);
+                this.jugadores.put(nombre, jugador);
+            }
+        } else {
+            throw new LimiteJugadoresException(); // Lanza excepción
+        }
+    }
+
+    public void cambioTurno() {
+        if (jugadorActivo.getNombre().equals(jugadores.get(0).getNombre())) {
+            jugadorActivo = jugadores.get(1);
+        } else {
+            jugadorActivo = jugadores.get(0);
+        }
     }
 
     public String generarStringTablero(Jugador jugador) {
-        // Inicializa una cadena vacía para almacenar la representación del tablero
         String tableroStr = "";
 
-        // Obtiene las casillas del tablero del jugador
         Casilla[][] casillas = jugador.getTablero().getCasillas();
 
-        // Añade el encabezado de las columnas al tableroStr
         tableroStr += "  ";
         for (int i = 0; i < casillas[0].length; i++) {
             tableroStr += (i + 1) + " ";
         }
         tableroStr += "\n";
 
-        // Itera a través de las filas del tablero
         for (int i = 0; i < casillas.length; i++) {
-            // Añade el encabezado de la fila (letra correspondiente) al tableroStr
             tableroStr += (char) ('A' + i) + " ";
 
-            // Itera a través de las columnas de la fila actual
             for (int j = 0; j < casillas[i].length; j++) {
-                // Obtiene la casilla correspondiente
                 Casilla casilla = casillas[i][j];
-                // Añade el símbolo de la casilla al tableroStr
                 tableroStr += casilla.getSimbolo() + " ";
             }
 
-            // Añade una nueva línea después de cada fila
             tableroStr += "\n";
         }
 
-        // Devuelve la representación del tablero como una cadena
         return tableroStr;
     }
 
@@ -180,27 +186,16 @@ public class ControladorJuego {
         return direccionConvertida;
     }
 
-    public boolean posicionarBarco(Barco barco, Casilla casillaInicial, Direccion direccion) {
+    public void posicionarBarco(Barco barco, Casilla casillaInicial, Direccion direccion) throws BarcoNoPosicionableException, BarcoFueraDeRangoException {
         Tablero tablero = this.jugadorActivo.getTablero();
-        try {
-            // Utilizar el método del Tablero para asignar las casillas al barco
-            Casilla[] casillasParaElBarco = tablero.asignarCasillasParaBarco(barco, casillaInicial.getCoordenada(), direccion.getDesplazamientoFila(), direccion.getDesplazamientoColumna());
 
-            // Configurar las casillas para el barco
-            barco.setCasillas(casillasParaElBarco);
-            // Añadir el barco a la lista de barcos del tablero
-            tablero.agregarBarco(barco);
+        // Utilizar el método del Tablero para asignar las casillas al barco
+        Casilla[] casillasParaElBarco = tablero.asignarCasillasParaBarco(barco, casillaInicial.getCoordenada(), direccion.getDesplazamientoFila(), direccion.getDesplazamientoColumna());
 
-            // Si llegamos a este punto, entonces no hubo excepciones y el barco fue posicionado correctamente
-            return true;
-        } catch (BarcoNoPosicionableException | BarcoFueraDeRangoException e) {
-            // Manejar las excepciones aquí
-            System.out.println(e.getMessage());
-
-            // Si llegamos a este punto, entonces hubo una excepción y el barco no pudo ser posicionado
-            return false;
-        }
-    }
+        // Configurar las casillas para el barco
+        barco.setCasillas(casillasParaElBarco);
+        tablero.agregarBarco(barco);
+    }    
 
 
     public void atacarCasilla(Jugador jugador, Casilla casilla) throws CasillaYaAtacadaException{
