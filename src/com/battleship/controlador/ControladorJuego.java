@@ -10,6 +10,7 @@ public class ControladorJuego {
     private HashMap<String, Jugador> jugadores;
     private Jugador jugadorActivo;
 
+    // Constructor privado
     private ControladorJuego() {
         this.jugadores = new HashMap<>();
         this.jugadorActivo = null;
@@ -61,7 +62,8 @@ public class ControladorJuego {
         Casilla[][] casillas = jugador.getTablero().getCasillas();
 
         tableroStr += "  ";
-        for (int i = 0; i < casillas[0].length; i++) {
+        // Generar números de columnas
+        for (int i = 0; i < casillas[0].length; i++) { // 1, 2, 3, ... 9
             tableroStr += (i + 1) + " ";
         }
         tableroStr += "\n";
@@ -145,7 +147,7 @@ public class ControladorJuego {
             numero = Character.getNumericValue(posibleNumero);
         }
 
-        if (letra < 'A' || letra > 'J' || numero < 1 || numero > 10) {
+        if (letra < 'A' || letra > 'J' || numero < 1) {
             throw new CoordenadaInvalidaException();
         }
 
@@ -189,13 +191,13 @@ public class ControladorJuego {
     public void posicionarBarco(Barco barco, Casilla casillaInicial, Direccion direccion) throws BarcoNoPosicionableException, BarcoFueraDeRangoException {
         Tablero tablero = this.jugadorActivo.getTablero();
 
-        // Utilizar el método del Tablero para asignar las casillas al barco
+        // Verificar las casillas en el tablero para ver si se puede posicionar el barco
         Casilla[] casillasParaElBarco = tablero.asignarCasillasParaBarco(barco, casillaInicial.getCoordenada(), direccion.getDesplazamientoFila(), direccion.getDesplazamientoColumna());
 
         // Configurar las casillas para el barco
         barco.setCasillas(casillasParaElBarco);
         tablero.agregarBarco(barco);
-    }    
+    }
 
 
     public void atacarCasilla(Jugador jugador, Casilla casilla) throws CasillaYaAtacadaException{

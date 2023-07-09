@@ -20,10 +20,10 @@ public class Aplicacion {
         pantalla.mostrarBienvenida();
         String[] nombresJugadores = new String[2];
 
-        for (int i = 1; i <= 2; i++) {
-            nombresJugadores[i - 1] = pantalla.pedirNombreJugador(i);
+        for (int i = 0; i < 2; i++) {
+            nombresJugadores[i] = pantalla.pedirNombreJugador(i);
             try {
-                controlador.crearJugador(nombresJugadores[i - 1]);
+                controlador.crearJugador(nombresJugadores[i]);
             } catch (JugadorExistenteException | LimiteJugadoresException e) {
                 pantalla.mostrarError(e.getMessage());
                 i--; // Permite al usuario ingresar el nombre nuevamente
@@ -33,7 +33,7 @@ public class Aplicacion {
         for (String nombreJugador : nombresJugadores) {
             controlador.setJugadorActivoPorNombre(nombreJugador);
             while (!controlador.todosLosBarcosPosicionados()) {
-                pantalla.mostrarMensajePosicionamiento(nombreJugador);
+                pantalla.mostrarMensajePosicionamiento();
                 pantalla.mostrarTablero();
                 pantalla.mostrarBarcosNoPosicionados();
                 pantalla.pedirDatosBarcoAPosicionar();

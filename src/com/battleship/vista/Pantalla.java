@@ -38,8 +38,8 @@ public class Pantalla {
         System.out.println(controlador.mostrarBarcosNoPosicionados());
     }
 
-    public void mostrarMensajePosicionamiento(String nombreJugador) {
-        System.out.println("\n" + nombreJugador + ", posiciona tus barcos:\n");
+    public void mostrarMensajePosicionamiento() {
+        System.out.println("\n" + controlador.getJugadorActivo().getNombre() + ", posiciona tus barcos:\n");
     }
 
     public void pedirDatosBarcoAPosicionar() {
