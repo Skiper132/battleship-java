@@ -49,13 +49,14 @@ public class Aplicacion {
 
             pantalla.imprimirMensajeInicioPosicionamiento();
             pantalla.imprimirOpcionesDePosicionamiento();
-
+            // Mientras no se hayan posicionado todos los barcos
             while (!controlador.getJugadorActivo().todosLosBarcosPosicionados()) {
 
                 String opcion = Lector.cargarEntrada();
                 switch (opcion) {
                     case "1":
                         while (!controlador.getJugadorActivo().todosLosBarcosPosicionados()) {
+                            // Se limpia la pantalla para que el usuario no vea las casillas que ya se han posicionado
                             esperar(2000);
                             pantalla.limpiarPantalla();
 
@@ -70,6 +71,7 @@ public class Aplicacion {
                             }
                         }
                         break;
+                    // Posicionamiento aleatorio: Se agregó esta opción para facilitar las pruebas, es posible que se elimine en la versión final
                     case "2":
                         controlador.posicionarBarcosAleatoriamente();
                         break;
@@ -83,22 +85,26 @@ public class Aplicacion {
         controlador.setJugadorActivoPorNombre(nombresJugadores[0]);
 
         // Inicio del juego
-        while(!controlador.verificarVictoria()) {
+        // Mientras no se haya ganado o perdido
+        while(!controlador.verificarDerrota()) {
             esperar(2000);
             pantalla.limpiarPantalla();
-
+            // Se muestran el tablero del jugador activo y el tablero del enemigo (con las casillas ocupadas escondidas)
             pantalla.mostrarTurnoJugador();
             pantalla.ventanaTableros();
 
             String entrada = pantalla.pedirCasilla();
 
+            // Si el usuario ingresa "EXIT", todos sus barcos se hunden automáticamente, por lo que pierde
             if (entrada.equalsIgnoreCase("EXIT")){
                 controlador.autoDestruirBarcos();
             } else {
                 Lector.cargarCasilla(entrada);
                 try {
+                    // Intenta atacar la casilla ingresada
                     pantalla.imprimirResultadoAtaque(controlador.atacarCasilla(controlador.getEnemigo(), Lector.getUltimaCasillaCargada()));
-                    controlador.cambiarJugadorActual();
+                    // Si el ataque fue exitoso, se cambia de jugador
+                    controlador.cambiarJugadorActivo();
                 } catch (CasillaYaAtacadaException e) {
                     pantalla.imprimirError(e.getMessage());
                 }
@@ -110,7 +116,7 @@ public class Aplicacion {
         for (String nombreJugador : nombresJugadores) {
             controlador.setJugadorActivoPorNombre(nombreJugador);
             pantalla.ventanaInformacionFinal();
-            controlador.cambiarJugadorActual();
+            controlador.cambiarJugadorActivo();
         }
 
     }
